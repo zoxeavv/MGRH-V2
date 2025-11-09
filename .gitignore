@@ -1,0 +1,8 @@
+node_modules
+.next
+dist
+out
+.cursor/
+.env*
+drizzle/migrations/*.sql
+pnpm-lock.yaml
