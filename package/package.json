@@ -4,13 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:nt": "NEXT_DISABLE_TURBOPACK=1 next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "db:generate": "drizzle-kit generate",
-    "db:push": "drizzle-kit push"
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "db:generate": "drizzle-kit generate:pg",
+    "db:push": "drizzle-kit push:pg"
   },
   "dependencies": {
     "@emotion/cache": "^11.11.0",
@@ -20,22 +16,30 @@
     "@mui/icons-material": "^7.0.1",
     "@mui/lab": "^7.0.0-beta.10",
     "@mui/material": "^7.0.1",
+    "@mui/material-nextjs": "^6.0.0",
+    "@supabase/ssr": "^0.1.0",
+    "@supabase/supabase-js": "^2.47.6",
     "@tabler/icons-react": "^3.33.0",
-    "@types/node": "^20.2.3",
     "apexcharts": "4.7.0",
-    "eslint": "8.46.0",
-    "eslint-config-next": "13.4.12",
+    "drizzle-orm": "^0.31.0",
     "lodash": "^4.17.21",
     "next": "^15.1.7",
     "react": "19.1.0",
     "react-apexcharts": "1.7.0",
     "react-dom": "19.1.0",
     "react-mui-sidebar": "^1.6.3",
-    "react-syntax-highlighter": "^15.6.1",
-    "typescript": "5.7.3"
+    "react-syntax-highlighter": "^15.6.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.7.0",
+    "@next/eslint-plugin-next": "^15.1.7",
     "@types/lodash": "4.14.196",
-    "@types/react-syntax-highlighter": "^15.5.13"
+    "@types/node": "^22.7.4",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "drizzle-kit": "^0.24.2",
+    "dotenv": "^16.4.5",
+    "eslint": "^9.7.0",
+    "typescript": "5.7.3",
+    "typescript-eslint": "^8.10.0"
   }
 }

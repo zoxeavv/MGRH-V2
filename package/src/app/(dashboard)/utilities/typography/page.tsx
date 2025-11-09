@@ -1,13 +1,13 @@
 'use client';
 import { Typography, Grid, CardContent } from '@mui/material';
-import PageContainer from '@/app/(DashboardLayout)/components/container/PageContainer';
-import DashboardCard from '@/app/(DashboardLayout)/components/shared/DashboardCard';
-import BlankCard from '@/app/(DashboardLayout)/components/shared/BlankCard';
+import PageContainer from '@/app/(dashboard)/components/container/PageContainer';
+import DashboardCard from '@/app/(dashboard)/components/shared/DashboardCard';
+import BlankCard from '@/app/(dashboard)/components/shared/BlankCard';
 
 
 const TypographyPage = () => {
   return (
-    <PageContainer title="Typography" description="this is Typography">
+    <PageContainer>
       <Grid container spacing={3}>
         <Grid
           size={{
