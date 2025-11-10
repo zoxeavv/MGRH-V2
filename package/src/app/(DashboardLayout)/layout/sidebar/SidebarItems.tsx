@@ -1,89 +1,95 @@
-import React from "react";
-import Menuitems from "./MenuItems";
-import { Box, Typography } from "@mui/material";
-import {
-  Logo,
-  Sidebar as MUI_Sidebar,
-  Menu,
-  MenuItem,
-  Submenu,
-} from "react-mui-sidebar";
-import { IconPoint } from '@tabler/icons-react';
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Upgrade } from "./Updrade";
+/* eslint-disable @next/next/no-img-element */
+"use client"
 
+import Image from "next/image"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
-const renderMenuItems = (items: any, pathDirect: any) => {
+import { cn } from "@/lib/utils"
 
-  return items.map((item: any) => {
+import { Upgrade } from "./Updrade"
+import { menuItems } from "./MenuItems"
 
-    const Icon = item.icon ? item.icon : IconPoint;
+type SidebarItemsProps = {
+  onNavigate?: () => void
+}
 
-    const itemIcon = <Icon stroke={1.5} size="1.3rem" />;
-
-    if (item.subheader) {
-      // Display Subheader
-      return (
-        <Menu
-          subHeading={item.subheader}
-          key={item.subheader}
-        />
-      );
-    }
-
-    //If the item has children (submenu)
-    if (item.children) {
-      return (
-        <Submenu
-          key={item.id}
-          title={item.title}
-          icon={itemIcon}
-          borderRadius='7px'
-        >
-          {renderMenuItems(item.children, pathDirect)}
-        </Submenu>
-      );
-    }
-
-    // If the item has no children, render a MenuItem
-
-    return (
-      <Box px={3} key={item.id}>
-        <MenuItem
-          key={item.id}
-          isSelected={pathDirect === item?.href}
-          borderRadius='8px'
-          icon={itemIcon}
-          link={item.href}
-          component={Link}
-        >
-          {item.title}
-        </MenuItem >
-      </Box>
-
-    );
-  });
-};
-
-
-const SidebarItems = () => {
-  const pathname = usePathname();
-  const pathDirect = pathname;
+export function SidebarItems({ onNavigate }: SidebarItemsProps) {
+  const pathname = usePathname()
 
   return (
-    < >
-      <MUI_Sidebar width={"100%"} showProfile={false} themeColor={"#5D87FF"} themeSecondaryColor={'#49beff'} >
+    <div className="flex h-full flex-col">
+      <div className="flex h-16 shrink-0 items-center gap-2 px-6">
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-lg font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          onClick={onNavigate}
+        >
+          <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
+            <Image
+              src="/images/logos/dark-logo.svg"
+              alt="Modernize logo"
+              width={32}
+              height={32}
+              className="h-6 w-6"
+              priority
+            />
+          </div>
+          <span className="hidden text-base font-semibold sm:inline">Modernize</span>
+        </Link>
+      </div>
 
-        <Logo img='/images/logos/dark-logo.svg' component={Link} to="/" >Modernize</Logo>
+      <nav aria-label="Primary" className="flex-1 overflow-y-auto px-4 py-2">
+        <ol className="space-y-3 text-sm">
+          {menuItems.map((item) => {
+            if (item.type === "section") {
+              return (
+                <li
+                  key={`section-${item.label}`}
+                  className="px-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground"
+                >
+                  {item.label}
+                </li>
+              )
+            }
 
-        {renderMenuItems(Menuitems, pathDirect)}
-        <Box px={2}>
-          <Upgrade />
-        </Box>
-      </MUI_Sidebar>
+            const Icon = item.icon
+            const isActive = pathname === item.href
 
-    </>
-  );
-};
-export default SidebarItems;
+            return (
+              <li key={item.id}>
+                <Link
+                  href={item.href}
+                  className={cn(
+                    "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:text-foreground",
+                    isActive &&
+                      "bg-brand-soft/60 text-brand shadow-sm ring-1 ring-inset ring-brand/40"
+                  )}
+                  aria-current={isActive ? "page" : undefined}
+                  onClick={onNavigate}
+                >
+                  <Icon
+                    size={18}
+                    stroke={1.5}
+                    className={cn(
+                      "text-muted-foreground transition-colors group-hover:text-foreground",
+                      isActive && "text-brand"
+                    )}
+                    aria-hidden="true"
+                  />
+                  <span>{item.title}</span>
+                </Link>
+              </li>
+            )
+          })}
+        </ol>
+      </nav>
+
+      <div className="px-4 pb-6">
+        <Upgrade onNavigate={onNavigate} />
+      </div>
+    </div>
+  )
+}
+
+export default SidebarItems

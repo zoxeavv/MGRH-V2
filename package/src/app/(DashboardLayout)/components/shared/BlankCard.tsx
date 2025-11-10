@@ -1,21 +1,21 @@
-import { Card } from "@mui/material";
+import { cn } from "@/lib/utils"
 
-type Props = {
-  className?: string;
-  children: React.ReactNode;
-};
+type BlankCardProps = {
+  className?: string
+  children: React.ReactNode
+}
 
-const BlankCard = ({ children, className }: Props) => {
+const BlankCard = ({ children, className }: BlankCardProps) => {
   return (
-    <Card
-      sx={{ p: 0, position: "relative" }}
-      className={className}
-      elevation={9}
-      variant={undefined}
+    <div
+      className={cn(
+        "relative rounded-2xl border border-border bg-card/80 shadow-card backdrop-blur-sm",
+        className
+      )}
     >
       {children}
-    </Card>
-  );
-};
+    </div>
+  )
+}
 
-export default BlankCard;
+export default BlankCard

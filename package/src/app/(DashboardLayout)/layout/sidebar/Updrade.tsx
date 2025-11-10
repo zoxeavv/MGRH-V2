@@ -1,26 +1,41 @@
-import { Box, Typography, Button } from '@mui/material';
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from "next/image"
+import Link from "next/link"
 
-export const Upgrade = () => {
-    return (
-        <Box
-            display='flex'
-            alignItems="center"
-            gap={2}
-            sx={{ mt: 3, p: 3, bgcolor: 'primary.light', borderRadius: '8px' }}
-        >
-            <>
-                <Box >
-                    <Typography variant="h5" sx={{ width: "80px" }} fontSize='16px' mb={1}>Haven&apos;t account ?</Typography>
-                    <Button color="primary" target="_blank" disableElevation component={Link} href="/authentication/register" variant="contained" aria-label="logout" size="small">
-                        Sign Up
-                    </Button>
-                </Box>
-                <Box mt="-35px" >
-                    <Image alt="Remy Sharp" src='/images/backgrounds/rocket.png' width={100} height={100} />
-                </Box>
-            </>
-        </Box>
-    );
-};
+import { Button } from "@/components/ui/button"
+
+type UpgradeProps = {
+  onNavigate?: () => void
+}
+
+export const Upgrade = ({ onNavigate }: UpgradeProps) => {
+  return (
+    <div className="relative overflow-hidden rounded-2xl bg-brand-soft/80 p-5 shadow-card ring-1 ring-brand/10">
+      <div className="flex items-center gap-4">
+        <div className="space-y-2">
+          <p className="text-sm font-semibold text-brand">Need an account?</p>
+          <p className="text-xs text-muted-foreground">
+            Create your workspace to invite teammates and share dashboards.
+          </p>
+          <Button
+            asChild
+            size="sm"
+            className="bg-brand text-brand-foreground hover:bg-brand/90"
+            onClick={onNavigate}
+          >
+            <Link href="/authentication/register">Sign up</Link>
+          </Button>
+        </div>
+        <div className="relative h-20 w-20 shrink-0">
+          <Image
+            src="/images/backgrounds/rocket.png"
+            alt="Launch illustration"
+            fill
+            sizes="80px"
+            className="object-contain"
+            priority
+          />
+        </div>
+      </div>
+    </div>
+  )
+}

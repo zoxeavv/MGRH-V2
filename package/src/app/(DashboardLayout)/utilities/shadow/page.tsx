@@ -1,51 +1,52 @@
-'use client';
-import { Paper, Box, Grid } from '@mui/material';
 import PageContainer from '@/app/(DashboardLayout)/components/container/PageContainer';
 import DashboardCard from '@/app/(DashboardLayout)/components/shared/DashboardCard';
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 
+const shadowTokens = [
+  { label: "Shadow xs", className: "shadow-xs" },
+  { label: "Shadow sm", className: "shadow-sm" },
+  { label: "Shadow base", className: "shadow" },
+  { label: "Shadow md", className: "shadow-md" },
+  { label: "Shadow lg", className: "shadow-lg" },
+  { label: "Shadow xl", className: "shadow-xl" },
+  { label: "Shadow 2xl", className: "shadow-2xl" },
+  { label: "Shadow card", className: "shadow-card" },
+] as const
 
-const Item = styled(Paper)(({ theme }) => ({
-  ...theme.typography.body1,
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-  height: 60,
-  lineHeight: '60px',
-}));
-
-const darkTheme = createTheme({ palette: { mode: 'dark' } });
-const lightTheme = createTheme({ palette: { mode: 'light' } });
+const modeTokens = [
+  { mode: "Light mode preview", className: "bg-slate-50 text-slate-700" },
+  { mode: "Dark mode preview", className: "bg-slate-900 text-slate-100" },
+] as const
 
 const Shadow = () => {
   return (
-    <PageContainer title="Shadow" description="this is Shadow">
-      <DashboardCard title="Shadow">
-        <Grid container spacing={2}>
-          {[lightTheme, darkTheme].map((theme, index) => (
-            <Grid key={index} size={6}>
-              <ThemeProvider theme={theme}>
-                <Box
-                  sx={{
-                    p: 2,
-                    bgcolor: 'background.default',
-                    display: 'grid',
-                    gridTemplateColumns: { md: '1fr 1fr' },
-                    gap: 2,
-                  }}
+    <PageContainer
+      title="Shadow Tokens"
+      description="Elevations applied across the interface. Each token is calibrated for accessible contrast in both light and dark themes."
+    >
+      <DashboardCard title="Elevation Scale" contentClassName="grid gap-6">
+        {modeTokens.map((mode) => (
+          <section
+            key={mode.mode}
+            aria-label={mode.mode}
+            className={`rounded-3xl border border-border/40 p-6 ${mode.className}`}
+          >
+            <p className="text-sm font-semibold uppercase tracking-wide opacity-70">{mode.mode}</p>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              {shadowTokens.map((token) => (
+                <div
+                  key={`${mode.mode}-${token.label}`}
+                  className={`flex h-24 flex-col justify-center rounded-2xl border border-white/10 px-6 ${token.className}`}
                 >
-                  {[0, 1, 2, 3, 4, 6, 8, 12, 16, 24].map((elevation) => (
-                    <Item key={elevation} elevation={elevation}>
-                      {`elevation=${elevation}`}
-                    </Item>
-                  ))}
-                </Box>
-              </ThemeProvider>
-            </Grid>
-          ))}
-        </Grid>
+                  <span className="text-sm font-semibold">{token.label}</span>
+                  <span className="text-xs opacity-70">{token.className}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+        ))}
       </DashboardCard>
     </PageContainer>
-  );
-};
+  )
+}
 
-export default Shadow;
+export default Shadow

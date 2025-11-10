@@ -1,120 +1,115 @@
 
-import Link from "next/link";
-import {
-  CardContent,
-  Typography,
-  Grid,
-  Rating,
-  Tooltip,
-  Fab,
-  Avatar
-} from "@mui/material";
-// import img1 from "public/images/products/s4.jpg";
-// import img2 from "public/images/products/s5.jpg";
-// import img3 from "public/images/products/s7.jpg";
-// import img4 from "public/images/products/s11.jpg";
-import { Stack } from "@mui/system";
-import { IconBasket } from "@tabler/icons-react";
-import BlankCard from "@/app/(DashboardLayout)/components/shared/BlankCard";
-import Image from "next/image";
+import Image from "next/image"
+import Link from "next/link"
+import { IconBasket, IconStar, IconStarFilled } from "@tabler/icons-react"
 
-const ecoCard = [
+import BlankCard from "@/app/(DashboardLayout)/components/shared/BlankCard"
+import { Button } from "@/components/ui/button"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+
+const products = [
   {
     title: "Boat Headphone",
     subheader: "September 14, 2023",
-    photo: '/images/products/s4.jpg',
-    salesPrice: 375,
-    price: 285,
+    photo: "/images/products/s4.jpg",
+    salePrice: 285,
+    fullPrice: 375,
     rating: 4,
   },
   {
     title: "MacBook Air Pro",
     subheader: "September 14, 2023",
-    photo: '/images/products/s5.jpg',
-    salesPrice: 650,
-    price: 900,
+    photo: "/images/products/s5.jpg",
+    salePrice: 900,
+    fullPrice: 650,
     rating: 5,
   },
   {
-    title: "Red Valvet Dress",
+    title: "Red Velvet Dress",
     subheader: "September 14, 2023",
-    photo: '/images/products/s7.jpg',
-    salesPrice: 150,
-    price: 200,
+    photo: "/images/products/s7.jpg",
+    salePrice: 200,
+    fullPrice: 150,
     rating: 3,
   },
   {
     title: "Cute Soft Teddybear",
     subheader: "September 14, 2023",
-    photo: '/images/products/s11.jpg',
-    salesPrice: 285,
-    price: 345,
+    photo: "/images/products/s11.jpg",
+    salePrice: 345,
+    fullPrice: 285,
     rating: 2,
   },
-];
+] as const
+
+const renderRating = (rating: number) => {
+  return (
+    <div className="flex items-center gap-1" aria-label={`${rating} out of 5 stars`}>
+      {Array.from({ length: 5 }).map((_, index) =>
+        index < rating ? (
+          <IconStarFilled key={index} className="h-4 w-4 text-amber-500" aria-hidden="true" />
+        ) : (
+          <IconStar key={index} className="h-4 w-4 text-amber-200" aria-hidden="true" />
+        )
+      )}
+    </div>
+  )
+}
 
 const Blog = () => {
   return (
-    <Grid container spacing={3}>
-      {ecoCard.map((product, index) => (
-        <Grid
-          key={index}
-          size={{
-            xs: 12,
-            md: 4,
-            lg: 3
-          }}>
-          <BlankCard>
-            <Typography component={Link} href="/">
-              <Avatar
-                src={product.photo} variant="square"
-                sx={{
-                  height: 250,
-                  width: '100%',
-                }}
-                
+    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      {products.map((product) => (
+        <BlankCard key={product.title} className="group overflow-hidden">
+          <div className="relative">
+            <Link href="/" className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2">
+              <Image
+                src={product.photo}
+                alt={product.title}
+                width={320}
+                height={220}
+                className="h-52 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                priority={false}
               />
-            </Typography>
-            <Tooltip title="Add To Cart">
-              <Fab
-                size="small"
-                color="primary"
-                sx={{ bottom: "75px", right: "15px", position: "absolute" }}
-              >
-                <IconBasket size="16" />
-              </Fab>
-            </Tooltip>
-            <CardContent sx={{ p: 3, pt: 2 }}>
-              <Typography variant="h6">{product.title}</Typography>
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent="space-between"
-                mt={1}
-              >
-                <Stack direction="row" alignItems="center">
-                  <Typography variant="h6">${product.price}</Typography>
-                  <Typography
-                    color="textSecondary"
-                    ml={1}
-                    sx={{ textDecoration: "line-through" }}
+            </Link>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="default"
+                    size="icon"
+                    className="absolute bottom-4 right-4 h-11 w-11 rounded-full bg-brand text-brand-foreground shadow-lg hover:bg-brand/90"
+                    aria-label={`Add ${product.title} to cart`}
                   >
-                    ${product.salesPrice}
-                  </Typography>
-                </Stack>
-                <Rating
-                  name="read-only"
-                  size="small"
-                  value={product.rating}
-                  readOnly
-                />
-              </Stack>
-            </CardContent>
-          </BlankCard>
-        </Grid>
-      ))}
-    </Grid>
-  );
-};
+                    <IconBasket className="h-5 w-5" aria-hidden="true" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Add to cart</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <div className="absolute left-4 top-4 inline-flex items-center rounded-full bg-background/80 px-3 py-1 text-xs font-semibold text-muted-foreground backdrop-blur">
+              {product.subheader}
+            </div>
+          </div>
 
-export default Blog;
+          <div className="space-y-3 p-5">
+            <h3 className="text-base font-semibold text-foreground">
+              <Link href="/" className="hover:text-primary">
+                {product.title}
+              </Link>
+            </h3>
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex items-baseline gap-2">
+                <span className="text-lg font-semibold text-foreground">${product.salePrice}</span>
+                <span className="text-xs text-muted-foreground line-through">${product.fullPrice}</span>
+              </div>
+              {renderRating(product.rating)}
+            </div>
+          </div>
+        </BlankCard>
+      ))}
+    </div>
+  )
+}
+
+export default Blog

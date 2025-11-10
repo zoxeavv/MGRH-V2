@@ -1,117 +1,49 @@
-import { useMediaQuery, Box, Drawer } from "@mui/material";
-import SidebarItems from "./SidebarItems";
 
+"use client"
 
+import { useEffect } from "react"
 
-interface ItemType {
-  isMobileSidebarOpen: boolean;
-  onSidebarClose: (event: React.MouseEvent<HTMLElement>) => void;
-  isSidebarOpen: boolean;
+import { Dialog, DialogContent } from "@/components/ui/dialog"
+
+import { SidebarItems } from "./SidebarItems"
+
+type SidebarProps = {
+  mobileOpen: boolean
+  onMobileOpenChange: (open: boolean) => void
 }
 
-const MSidebar = ({
-  isMobileSidebarOpen,
-  onSidebarClose,
-  isSidebarOpen,
-}: ItemType) => {
-  const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up("lg"));
-
-  const sidebarWidth = "270px";
-
-  // Custom CSS for short scrollbar
-  const scrollbarStyles = {
-    '&::-webkit-scrollbar': {
-      width: '7px',
-
-    },
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: '#eff2f7',
-      borderRadius: '15px',
-    },
-  };
-
-
-  if (lgUp) {
-    return (
-      <Box
-        sx={{
-          width: sidebarWidth,
-          flexShrink: 0,
-        }}
-      >
-        {/* ------------------------------------------- */}
-        {/* Sidebar for desktop */}
-        {/* ------------------------------------------- */}
-        <Drawer
-          anchor="left"
-          open={isSidebarOpen}
-          variant="permanent"
-          slotProps={{
-            paper: {
-              sx: {
-                boxSizing: "border-box",
-                ...scrollbarStyles,
-                width: sidebarWidth,
-              },
-            }
-          }}
-        >
-          {/* ------------------------------------------- */}
-          {/* Sidebar Box */}
-          {/* ------------------------------------------- */}
-          <Box
-            sx={{
-              height: "100%",
-            }}
-          >
-
-            <Box>
-              {/* ------------------------------------------- */}
-              {/* Sidebar Items */}
-              {/* ------------------------------------------- */}
-              <SidebarItems />
-            </Box>
-          </Box>
-        </Drawer>
-      </Box >
-    );
-  }
+export function Sidebar({ mobileOpen, onMobileOpenChange }: SidebarProps) {
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.setProperty("overflow", "hidden")
+    } else {
+      document.body.style.removeProperty("overflow")
+    }
+    return () => {
+      document.body.style.removeProperty("overflow")
+    }
+  }, [mobileOpen])
 
   return (
-    <Drawer
-      anchor="left"
-      open={isMobileSidebarOpen}
-      onClose={onSidebarClose}
-      variant="temporary"
-
-      slotProps={{
-        paper: {
-          sx: {
-            boxShadow: (theme) => theme.shadows[8],
-            ...scrollbarStyles,
-          },
-        }
-      }}
-    >
-      {/* ------------------------------------------- */}
-      {/* Sidebar Box */}
-      {/* ------------------------------------------- */}
-      <Box>
-        {/* ------------------------------------------- */}
-        {/* Sidebar Items */}
-        {/* ------------------------------------------- */}
+    <>
+      <aside
+        className="hidden w-[280px] shrink-0 border-r border-border bg-card/60 lg:flex lg:flex-col"
+        aria-label="Primary"
+      >
         <SidebarItems />
-      </Box>
-      {/* ------------------------------------------- */}
-      {/* Sidebar For Mobile */}
-      {/* ------------------------------------------- */}
-    </Drawer>
-  );
-};
+      </aside>
 
-export default MSidebar;
+      <Dialog open={mobileOpen} onOpenChange={onMobileOpenChange}>
+        <DialogContent
+          className="inset-y-0 left-0 flex w-[min(88vw,320px)] transform-none overflow-hidden border-0 bg-background p-0 text-foreground shadow-lg sm:rounded-none"
+          overlayClassName="bg-background/80 backdrop-blur-sm"
+          aria-label="Mobile navigation"
+        >
+          <SidebarItems onNavigate={() => onMobileOpenChange(false)} />
+        </DialogContent>
+      </Dialog>
+    </>
+  )
+}
 
-
-
-
-
+export default Sidebar

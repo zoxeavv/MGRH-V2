@@ -1,330 +1,86 @@
-'use client';
-import { Typography, Grid, CardContent } from '@mui/material';
 import PageContainer from '@/app/(DashboardLayout)/components/container/PageContainer';
 import DashboardCard from '@/app/(DashboardLayout)/components/shared/DashboardCard';
 import BlankCard from '@/app/(DashboardLayout)/components/shared/BlankCard';
 
+const headingSamples = [
+  { label: "Display 1", className: "text-4xl font-semibold tracking-tight", spec: "font size: 36 | line-height: 44 | font weight: 600" },
+  { label: "Display 2", className: "text-3xl font-semibold tracking-tight", spec: "font size: 30 | line-height: 40 | font weight: 600" },
+  { label: "Heading 3", className: "text-2xl font-semibold tracking-tight", spec: "font size: 24 | line-height: 32 | font weight: 600" },
+  { label: "Heading 4", className: "text-xl font-semibold tracking-tight", spec: "font size: 20 | line-height: 28 | font weight: 600" },
+  { label: "Heading 5", className: "text-lg font-semibold tracking-tight", spec: "font size: 18 | line-height: 26 | font weight: 600" },
+  { label: "Heading 6", className: "text-base font-semibold tracking-tight", spec: "font size: 16 | line-height: 24 | font weight: 600" },
+] as const
+
+const textSamples = [
+  { label: "Subtitle 1", className: "text-base font-medium", spec: "font size: 16 | line-height: 24 | font weight: 500" },
+  { label: "Subtitle 2", className: "text-sm font-medium", spec: "font size: 14 | line-height: 21 | font weight: 500" },
+  { label: "Body 1", className: "text-base", spec: "font size: 16 | line-height: 24 | font weight: 400" },
+  { label: "Body 2", className: "text-sm", spec: "font size: 14 | line-height: 20 | font weight: 400" },
+  { label: "Caption", className: "text-xs uppercase tracking-wide", spec: "font size: 12 | line-height: 18 | font weight: 600" },
+  { label: "Overline", className: "text-xs font-medium tracking-[0.2em] uppercase", spec: "font size: 12 | line-height: 20 | letter spacing: 0.2em" },
+] as const
+
+const toneSamples = [
+  { label: "Text Primary", className: "text-foreground" },
+  { label: "Text Muted", className: "text-muted-foreground" },
+  { label: "Text Brand", className: "text-brand" },
+  { label: "Text Accent", className: "text-accent" },
+  { label: "Text Warning", className: "text-amber-600" },
+  { label: "Text Error", className: "text-red-600" },
+  { label: "Text Success", className: "text-emerald-600" },
+] as const
 
 const TypographyPage = () => {
   return (
-    <PageContainer title="Typography" description="this is Typography">
-      <Grid container spacing={3}>
-        <Grid
-          size={{
-            sm: 12
-          }}>
-          <DashboardCard title="Default Text">
-            <Grid container spacing={3}>
-              <Grid
-                size={{
-                  sm: 12
-                }}>
-                <BlankCard>
-                  <CardContent>
-                    <Typography variant="h1">h1. Heading</Typography>
-                    <Typography variant="body1" color="textSecondary">
-                      font size: 30 | line-height: 45 | font weight: 500
-                    </Typography>
-                  </CardContent>
-                </BlankCard>
-              </Grid>
-              <Grid
-                size={{
-                  sm: 12
-                }}>
-                <BlankCard>
-                  <CardContent>
-                    <Typography variant="h2">h2. Heading</Typography>
-                    <Typography variant="body1" color="textSecondary">
-                      font size: 24 | line-height: 36 | font weight: 500
-                    </Typography>
-                  </CardContent>
-                </BlankCard>
-              </Grid>
-              <Grid
-                size={{
-                  sm: 12
-                }}>
-                <BlankCard>
-                  <CardContent>
-                    <Typography variant="h3">h3. Heading</Typography>
+    <PageContainer
+      title="Typography"
+      description="Reference the unified typography scale and semantic text styles used throughout the dashboard."
+    >
+      <DashboardCard title="Heading Scale" contentClassName="grid gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
+          {headingSamples.map((sample) => (
+            <BlankCard key={sample.label} className="p-6">
+              <div className="space-y-2">
+                <p className={`${sample.className} text-foreground`}>{sample.label}</p>
+                <p className="text-sm text-muted-foreground">{sample.spec}</p>
+              </div>
+            </BlankCard>
+          ))}
+        </div>
+      </DashboardCard>
 
-                    <Typography variant="body1" color="textSecondary">
-                      font size: 21 | line-height: 31.5 | font weight: 500
-                    </Typography>
-                  </CardContent>
-                </BlankCard>
-              </Grid>
-              <Grid
-                size={{
-                  sm: 12
-                }}>
-                <BlankCard>
-                  <CardContent>
-                    <Typography variant="h4">h4. Heading</Typography>
+      <DashboardCard title="Body Text" contentClassName="grid gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
+          {textSamples.map((sample) => (
+            <BlankCard key={sample.label} className="p-6">
+              <div className="space-y-2">
+                <p className={`${sample.className} text-foreground`}>
+                  {sample.label}. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                </p>
+                <p className="text-sm text-muted-foreground">{sample.spec}</p>
+              </div>
+            </BlankCard>
+          ))}
+        </div>
+      </DashboardCard>
 
-                    <Typography variant="body1" color="textSecondary">
-                      font size: 18 | line-height: 27 | font weight: 500
-                    </Typography>
-                  </CardContent>
-                </BlankCard>
-              </Grid>
-              <Grid
-                size={{
-                  sm: 12
-                }}>
-                <BlankCard>
-                  <CardContent>
-                    <Typography variant="h5">h5. Heading</Typography>
-
-                    <Typography variant="body1" color="textSecondary">
-                      font size: 16 | line-height: 24 | font weight: 500
-                    </Typography>
-                  </CardContent>
-                </BlankCard>
-              </Grid>
-              <Grid
-                size={{
-                  sm: 12
-                }}>
-                <BlankCard>
-                  <CardContent>
-                    <Typography variant="h6">h6. Heading</Typography>
-
-                    <Typography variant="body1" color="textSecondary">
-                      font size: 14 | line-height: 21 | font weight: 500
-                    </Typography>
-                  </CardContent>
-                </BlankCard>
-              </Grid>
-              <Grid
-                size={{
-                  sm: 12
-                }}>
-                <BlankCard>
-                  <CardContent>
-                    <Typography variant="subtitle1">
-                      subtitle1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis
-                      tenetur
-                    </Typography>
-
-                    <Typography variant="body1" color="textSecondary">
-                      font size: 16 | line-height: 28 | font weight: 400
-                    </Typography>
-                  </CardContent>
-                </BlankCard>
-              </Grid>
-              <Grid
-                size={{
-                  sm: 12
-                }}>
-                <BlankCard>
-                  <CardContent>
-                    <Typography variant="subtitle2">
-                      subtitle2. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis
-                      tenetur
-                    </Typography>
-
-                    <Typography variant="body1" color="textSecondary">
-                      font size: 14 | line-height: 21 | font weight: 400
-                    </Typography>
-                  </CardContent>
-                </BlankCard>
-              </Grid>
-              <Grid
-                size={{
-                  sm: 12
-                }}>
-                <BlankCard>
-                  <CardContent>
-                    <Typography variant="body1">
-                      body1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur
-                    </Typography>
-
-                    <Typography variant="body1" color="textSecondary">
-                      font size: 16 | line-height: 24 | font weight: 400
-                    </Typography>
-                  </CardContent>
-                </BlankCard>
-              </Grid>
-              <Grid
-                size={{
-                  sm: 12
-                }}>
-                <BlankCard>
-                  <CardContent>
-                    <Typography variant="body2">
-                      body2. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur
-                    </Typography>
-
-                    <Typography variant="body1" color="textSecondary">
-                      font size: 14 | line-height: 20 | font weight: 400
-                    </Typography>
-                  </CardContent>
-                </BlankCard>
-              </Grid>
-              <Grid
-                size={{
-                  sm: 12
-                }}>
-                <BlankCard>
-                  <CardContent>
-                    <Typography variant="caption">
-                      caption. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis
-                      tenetur
-                    </Typography>
-
-                    <Typography variant="body1" color="textSecondary">
-                      font size: 12 | line-height: 19 | font weight: 400
-                    </Typography>
-                  </CardContent>
-                </BlankCard>
-              </Grid>
-              <Grid
-                size={{
-                  sm: 12
-                }}>
-                <BlankCard>
-                  <CardContent>
-                    <Typography variant="overline">
-                      overline. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis
-                      tenetur
-                    </Typography>
-
-                    <Typography variant="body1" color="textSecondary">
-                      font size: 12 | line-height: 31 | font weight: 400
-                    </Typography>
-                  </CardContent>
-                </BlankCard>
-              </Grid>
-            </Grid>
-
-          </DashboardCard>
-        </Grid>
-        <Grid
-          size={{
-            sm: 12
-          }}>
-          <DashboardCard title="Default Text">
-            <Grid container spacing={3}>
-              <Grid
-                size={{
-                  sm: 12
-                }}>
-                <BlankCard>
-                  <CardContent>
-                    <Typography variant="h5" color="textprimary">
-                      Text Primary
-                    </Typography>
-
-                    <Typography variant="body1" color="textprimary">
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur
-                    </Typography>
-                  </CardContent>
-                </BlankCard>
-              </Grid>
-              <Grid
-                size={{
-                  sm: 12
-                }}>
-                <BlankCard>
-                  <CardContent>
-                    <Typography variant="h5" color="textSecondary">
-                      Text Secondary
-                    </Typography>
-
-                    <Typography variant="body1" color="textSecondary">
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur
-                    </Typography>
-                  </CardContent>
-                </BlankCard>
-              </Grid>
-              <Grid
-                size={{
-                  sm: 12
-                }}>
-                <BlankCard>
-                  <CardContent>
-                    <Typography variant="h5" sx={{ color: (theme) => theme.palette.info.main }}>
-                      Text Info
-                    </Typography>
-
-                    <Typography variant="body1" sx={{ color: (theme) => theme.palette.info.main }}>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur
-                    </Typography>
-                  </CardContent>
-                </BlankCard>
-              </Grid>
-              <Grid
-                size={{
-                  sm: 12
-                }}>
-                <BlankCard>
-                  <CardContent>
-                    <Typography variant="h5" sx={{ color: (theme) => theme.palette.primary.main }}>
-                      Text Primary
-                    </Typography>
-
-                    <Typography variant="body1" sx={{ color: (theme) => theme.palette.primary.main }}>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur
-                    </Typography>
-                  </CardContent>
-                </BlankCard>
-              </Grid>
-              <Grid
-                size={{
-                  sm: 12
-                }}>
-                <BlankCard>
-                  <CardContent>
-                    <Typography variant="h5" sx={{ color: (theme) => theme.palette.warning.main }}>
-                      Text Warning
-                    </Typography>
-
-                    <Typography variant="body1" sx={{ color: (theme) => theme.palette.warning.main }}>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur
-                    </Typography>
-                  </CardContent>
-                </BlankCard>
-              </Grid>
-              <Grid
-                size={{
-                  sm: 12
-                }}>
-                <BlankCard>
-                  <CardContent>
-                    <Typography variant="h5" sx={{ color: (theme) => theme.palette.error.main }}>
-                      Text Error
-                    </Typography>
-
-                    <Typography variant="body1" sx={{ color: (theme) => theme.palette.error.main }}>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur
-                    </Typography>
-                  </CardContent>
-                </BlankCard>
-              </Grid>
-              <Grid
-                size={{
-                  sm: 12
-                }}>
-                <BlankCard>
-                  <CardContent>
-                    <Typography variant="h5" sx={{ color: (theme) => theme.palette.success.main }}>
-                      Text Success
-                    </Typography>
-
-                    <Typography variant="body1" sx={{ color: (theme) => theme.palette.success.main }}>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur
-                    </Typography>
-                  </CardContent>
-                </BlankCard>
-              </Grid>
-            </Grid>
-          </DashboardCard>
-        </Grid>
-      </Grid >
+      <DashboardCard title="Color Tokens" contentClassName="grid gap-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {toneSamples.map((sample) => (
+            <BlankCard key={sample.label} className="p-6">
+              <p className={`text-sm font-semibold ${sample.className}`}>{sample.label}</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Utility class: <code className="rounded bg-muted px-1 py-0.5">{sample.className}</code>
+              </p>
+              <p className={`mt-4 text-sm ${sample.className}`}>
+                Sample text demonstrating the tone for accessible emphasis.
+              </p>
+            </BlankCard>
+          ))}
+        </div>
+      </DashboardCard>
     </PageContainer>
-  );
-};
+  )
+}
 
-export default TypographyPage;
+export default TypographyPage

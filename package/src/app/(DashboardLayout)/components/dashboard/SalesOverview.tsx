@@ -1,117 +1,176 @@
-import React from 'react';
-import { Select, MenuItem } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import DashboardCard from '@/app/(DashboardLayout)/components/shared/DashboardCard';
-import dynamic from "next/dynamic";
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+import * as React from "react"
+import dynamic from "next/dynamic"
+import type { ApexOptions } from "apexcharts"
+import { useTheme } from "next-themes"
 
+import DashboardCard from "@/app/(DashboardLayout)/components/shared/DashboardCard"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false })
+
+const MONTH_OPTIONS = [
+  { label: "March 2025", value: "march-2025" },
+  { label: "April 2025", value: "april-2025" },
+  { label: "May 2025", value: "may-2025" },
+] as const
 
 const SalesOverview = () => {
+  const { resolvedTheme } = useTheme()
+  const [month, setMonth] = React.useState<string>(MONTH_OPTIONS[0].value)
+  const [chartColors, setChartColors] = React.useState<string[]>([
+    "hsl(221.2 83.2% 53.3%)",
+    "hsl(15 100% 63%)",
+  ])
 
-    // select
-    const [month, setMonth] = React.useState('1');
+  React.useEffect(() => {
+    const root = document.documentElement
+    const computed = getComputedStyle(root)
+    const primary = computed.getPropertyValue("--primary").trim()
+    const accent = computed.getPropertyValue("--accent").trim()
 
-    const handleChange = (event: any) => {
-        setMonth(event.target.value);
-    };
+    if (primary && accent) {
+      setChartColors([`hsl(${primary})`, `hsl(${accent})`])
+    }
+  }, [resolvedTheme])
 
-    // chart color
-    const theme = useTheme();
-    const primary = theme.palette.primary.main;
-    const secondary = theme.palette.secondary.main;
+  const optionscolumnchart = React.useMemo<ApexOptions>(
+    () => ({
+      chart: {
+        type: "bar" as const,
+        fontFamily: "'Plus Jakarta Sans', sans-serif",
+        foreColor: "hsl(var(--muted-foreground))",
+        toolbar: { show: false },
+        height: 360,
+      },
+      colors: chartColors,
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: "44%",
+          borderRadiusApplication: "end" as const,
+          borderRadiusWhenStacked: "all" as const,
+          borderRadius: 8,
+        },
+      },
+      stroke: {
+        show: true,
+        width: 6,
+        colors: ["transparent"],
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      legend: {
+        show: false,
+      },
+      grid: {
+        borderColor: "rgba(148, 163, 184, 0.25)",
+        strokeDashArray: 4,
+        xaxis: { lines: { show: false } },
+        padding: { left: 10, right: 10 },
+      },
+      yaxis: {
+        tickAmount: 4,
+        labels: {
+          style: {
+            colors: "hsl(var(--muted-foreground))",
+            fontSize: "12px",
+          },
+        },
+      },
+      xaxis: {
+        categories: ["16/08", "17/08", "18/08", "19/08", "20/08", "21/08", "22/08", "23/08"],
+        axisBorder: {
+          show: false,
+        },
+        labels: {
+          style: {
+            colors: "hsl(var(--muted-foreground))",
+            fontSize: "12px",
+          },
+        },
+      },
+      tooltip: {
+        theme: resolvedTheme === "dark" ? "dark" : "light",
+        fillSeriesColor: false,
+        y: {
+          formatter: (value: number) => `$${value.toLocaleString()}`,
+        },
+      },
+    }),
+    [chartColors, resolvedTheme]
+  )
 
-    // chart
-    const optionscolumnchart: any = {
-        chart: {
-            type: 'bar',
-            fontFamily: "'Plus Jakarta Sans', sans-serif;",
-            foreColor: '#adb0bb',
-            toolbar: {
-                show: true,
-            },
-            height: 370,
-        },
-        colors: [primary, secondary],
-        plotOptions: {
-            bar: {
-                horizontal: false,
-                barHeight: '60%',
-                columnWidth: '42%',
-                borderRadius: [6],
-                borderRadiusApplication: 'end',
-                borderRadiusWhenStacked: 'all',
-            },
-        },
+  const seriescolumnchart = React.useMemo(
+    () => [
+      {
+        name: "Earnings",
+        data: [355, 390, 300, 350, 390, 180, 355, 390],
+      },
+      {
+        name: "Expenses",
+        data: [280, 250, 325, 215, 250, 310, 280, 250],
+      },
+    ],
+    []
+  )
 
-        stroke: {
-            show: true,
-            width: 5,
-            lineCap: "butt",
-            colors: ["transparent"],
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        legend: {
-            show: false,
-        },
-        grid: {
-            borderColor: 'rgba(0,0,0,0.1)',
-            strokeDashArray: 3,
-            xaxis: {
-                lines: {
-                    show: false,
-                },
-            },
-        },
-        yaxis: {
-            tickAmount: 4,
-        },
-        xaxis: {
-            categories: ['16/08', '17/08', '18/08', '19/08', '20/08', '21/08', '22/08', '23/08'],
-            axisBorder: {
-                show: false,
-            },
-        },
-        tooltip: {
-            theme: 'dark',
-            fillSeriesColor: false,
-        },
-    };
-    const seriescolumnchart: any = [
-        {
-            name: 'Eanings this month',
-            data: [355, 390, 300, 350, 390, 180, 355, 390],
-        },
-        {
-            name: 'Expense this month',
-            data: [280, 250, 325, 215, 250, 310, 280, 250],
-        },
-    ];
+  return (
+    <DashboardCard
+      title="Sales Overview"
+      subtitle="Earnings vs Expenses"
+      action={
+        <Select value={month} onValueChange={setMonth}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select month" />
+          </SelectTrigger>
+          <SelectContent>
+            {MONTH_OPTIONS.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      }
+      contentClassName="pt-2"
+    >
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-wrap items-center gap-4 text-sm">
+          <div className="flex items-center gap-2">
+            <span className="h-3 w-3 rounded-full bg-brand" aria-hidden="true" />
+            <span className="font-medium text-muted-foreground">Earnings</span>
+            <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700">
+              +12.4%
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="h-3 w-3 rounded-full bg-accent" aria-hidden="true" />
+            <span className="font-medium text-muted-foreground">Expenses</span>
+            <span className="rounded-full bg-red-50 px-2 py-0.5 text-xs font-semibold text-red-600">
+              -3.1%
+            </span>
+          </div>
+        </div>
 
-    return (
+        <div role="img" aria-label="Bar chart comparing monthly earnings and expenses">
+          <Chart
+            options={optionscolumnchart}
+            series={seriescolumnchart}
+            type="bar"
+            height={360}
+            width="100%"
+          />
+        </div>
+      </div>
+    </DashboardCard>
+  )
+}
 
-        <DashboardCard title="Sales Overview" action={
-            <Select
-                labelId="month-dd"
-                id="month-dd"
-                value={month}
-                size="small"
-                onChange={handleChange}
-            >
-                <MenuItem value={1}>March 2025</MenuItem>
-                <MenuItem value={2}>April 2025</MenuItem>
-                <MenuItem value={3}>May 2025</MenuItem>
-            </Select>
-        }>
-            <Chart
-                options={optionscolumnchart}
-                series={seriescolumnchart}
-                type="bar"
-                height={370} width={"100%"}
-            />
-        </DashboardCard>
-    );
-};
-
-export default SalesOverview;
+export default SalesOverview

@@ -1,74 +1,61 @@
-"use client";
-import { styled, Container, Box } from "@mui/material";
-import React, { useState } from "react";
-import Header from "@/app/(DashboardLayout)/layout/header/Header";
-import Sidebar from "@/app/(DashboardLayout)/layout/sidebar/Sidebar";
+"use client"
 
+import * as React from "react"
 
-const MainWrapper = styled("div")(() => ({
-  display: "flex",
-  minHeight: "100vh",
-  width: "100%",
-}));
+import { Header } from "@/app/(DashboardLayout)/layout/header/Header"
+import { Sidebar } from "@/app/(DashboardLayout)/layout/sidebar/Sidebar"
 
-const PageWrapper = styled("div")(() => ({
-  display: "flex",
-  flexGrow: 1,
-  paddingBottom: "60px",
-  flexDirection: "column",
-  zIndex: 1,
-  backgroundColor: "transparent",
-}));
-
-interface Props {
-  children: React.ReactNode;
+type DashboardLayoutProps = {
+  children: React.ReactNode
 }
 
+export default function DashboardLayout({ children }: DashboardLayoutProps) {
+  const [mobileSidebarOpen, setMobileSidebarOpen] = React.useState(false)
+  const menuButtonRef = React.useRef<HTMLButtonElement | null>(null)
+  const setMenuButtonRef = React.useCallback((node: HTMLButtonElement | null) => {
+    menuButtonRef.current = node
+  }, [])
+  const contentRef = React.useRef<HTMLDivElement>(null)
 
+  const handleMobileOpenChange = React.useCallback(
+    (open: boolean) => {
+      setMobileSidebarOpen(open)
+      if (!open) {
+        requestAnimationFrame(() => {
+          menuButtonRef.current?.focus()
+        })
+      }
+    },
+    []
+  )
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
-  const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  React.useEffect(() => {
+    const contentEl = contentRef.current
+    if (!contentEl) return
+
+    contentEl.toggleAttribute("inert", mobileSidebarOpen)
+    contentEl.setAttribute("aria-hidden", mobileSidebarOpen ? "true" : "false")
+  }, [mobileSidebarOpen])
+
   return (
-    <MainWrapper className="mainwrapper">
-      {/* ------------------------------------------- */}
-      {/* Sidebar */}
-      {/* ------------------------------------------- */}
-      <Sidebar
-        isSidebarOpen={isSidebarOpen}
-        isMobileSidebarOpen={isMobileSidebarOpen}
-        onSidebarClose={() => setMobileSidebarOpen(false)}
-      />
-      {/* ------------------------------------------- */}
-      {/* Main Wrapper */}
-      {/* ------------------------------------------- */}
-      <PageWrapper className="page-wrapper">
-        {/* ------------------------------------------- */}
-        {/* Header */}
-        {/* ------------------------------------------- */}
-        <Header toggleMobileSidebar={() => setMobileSidebarOpen(true)} />
-        {/* ------------------------------------------- */}
-        {/* PageContent */}
-        {/* ------------------------------------------- */}
-        <Container
-          sx={{
-            paddingTop: "20px",
-            maxWidth: "1200px",
-          }}
+    <div className="flex min-h-dvh w-full bg-muted/30 text-foreground">
+      <Sidebar mobileOpen={mobileSidebarOpen} onMobileOpenChange={handleMobileOpenChange} />
+      <div className="flex min-h-dvh flex-1 flex-col lg:pl-0">
+        <Header
+          onOpenMobileSidebar={() => handleMobileOpenChange(true)}
+          menuButtonRef={setMenuButtonRef}
+        />
+        <div
+          ref={contentRef}
+          className="flex flex-1 flex-col"
         >
-          {/* ------------------------------------------- */}
-          {/* Page Route */}
-          {/* ------------------------------------------- */}
-          <Box sx={{ minHeight: "calc(100vh - 170px)" }}>{children}</Box>
-          {/* ------------------------------------------- */}
-          {/* End Page */}
-          {/* ------------------------------------------- */}
-        </Container>
-      </PageWrapper>
-    </MainWrapper>
-  );
+          <main id="content" role="main" className="flex-1">
+            <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-6 sm:px-6 lg:px-8">
+              {children}
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  )
 }
