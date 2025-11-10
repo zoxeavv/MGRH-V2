@@ -1,89 +1,110 @@
-import React from "react";
-import Menuitems from "./MenuItems";
-import { Box, Typography } from "@mui/material";
-import {
-  Logo,
-  Sidebar as MUI_Sidebar,
-  Menu,
-  MenuItem,
-  Submenu,
-} from "react-mui-sidebar";
-import { IconPoint } from '@tabler/icons-react';
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Upgrade } from "./Updrade";
+'use client';
 
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
-const renderMenuItems = (items: any, pathDirect: any) => {
+import type { ActiveMembershipContext } from '@/lib/auth/session';
 
-  return items.map((item: any) => {
+import { sidebarNavItems } from './MenuItems';
 
-    const Icon = item.icon ? item.icon : IconPoint;
-
-    const itemIcon = <Icon stroke={1.5} size="1.3rem" />;
-
-    if (item.subheader) {
-      // Display Subheader
-      return (
-        <Menu
-          subHeading={item.subheader}
-          key={item.subheader}
-        />
-      );
-    }
-
-    //If the item has children (submenu)
-    if (item.children) {
-      return (
-        <Submenu
-          key={item.id}
-          title={item.title}
-          icon={itemIcon}
-          borderRadius='7px'
-        >
-          {renderMenuItems(item.children, pathDirect)}
-        </Submenu>
-      );
-    }
-
-    // If the item has no children, render a MenuItem
-
-    return (
-      <Box px={3} key={item.id}>
-        <MenuItem
-          key={item.id}
-          isSelected={pathDirect === item?.href}
-          borderRadius='8px'
-          icon={itemIcon}
-          link={item.href}
-          component={Link}
-        >
-          {item.title}
-        </MenuItem >
-      </Box>
-
-    );
-  });
+type SidebarItemsProps = {
+  context: ActiveMembershipContext;
+  onNavigate?: () => void;
 };
 
-
-const SidebarItems = () => {
+const SidebarItems = ({ context, onNavigate }: SidebarItemsProps) => {
   const pathname = usePathname();
-  const pathDirect = pathname;
 
   return (
-    < >
-      <MUI_Sidebar width={"100%"} showProfile={false} themeColor={"#5D87FF"} themeSecondaryColor={'#49beff'} >
-
-        <Logo img='/images/logos/dark-logo.svg' component={Link} to="/" >Modernize</Logo>
-
-        {renderMenuItems(Menuitems, pathDirect)}
-        <Box px={2}>
-          <Upgrade />
+    <Stack
+      component="nav"
+      spacing={3}
+      sx={{
+        flex: 1,
+        height: '100%',
+        py: 3,
+        px: 2,
+      }}
+    >
+      <Stack direction="row" spacing={2} alignItems="center" px={1}>
+        <Avatar
+          variant="rounded"
+          sx={{
+            bgcolor: 'primary.light',
+            color: 'primary.main',
+            width: 40,
+            height: 40,
+            fontWeight: 600,
+          }}
+        >
+          {context.organization.name.substring(0, 2).toUpperCase()}
+        </Avatar>
+        <Box>
+          <Typography variant="subtitle1" fontWeight={600}>
+            {context.organization.name}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            {context.organization.slug}
+          </Typography>
         </Box>
-      </MUI_Sidebar>
+      </Stack>
 
-    </>
+      <Box px={1}>
+        <Chip
+          label={`${context.membership.role.toUpperCase()} • ${context.membership.status.toUpperCase()}`}
+          size="small"
+          color="primary"
+          variant="outlined"
+          sx={{ fontWeight: 600 }}
+        />
+      </Box>
+
+      <Divider />
+
+      <List component="nav" dense disablePadding>
+        {sidebarNavItems.map((item) => {
+          const selected = item.exact ? pathname === item.href : pathname.startsWith(item.href);
+
+          return (
+            <ListItemButton
+              key={item.href}
+              component={Link}
+              href={item.href}
+              selected={selected}
+              onClick={onNavigate}
+              sx={{
+                borderRadius: 2,
+                mb: 0.5,
+              }}
+            >
+              <ListItemIcon sx={{ minWidth: 36 }}>{item.icon}</ListItemIcon>
+              <ListItemText
+                primary={item.title}
+                primaryTypographyProps={{
+                  fontWeight: selected ? 600 : 500,
+                  color: selected ? 'primary.main' : 'text.primary',
+                }}
+              />
+              {item.badge ? (
+                <Chip size="small" label={item.badge} color="secondary" sx={{ fontWeight: 600 }} />
+              ) : null}
+            </ListItemButton>
+          );
+        })}
+      </List>
+    </Stack>
   );
 };
+
 export default SidebarItems;
+

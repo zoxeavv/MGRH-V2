@@ -1,79 +1,67 @@
-import { useMediaQuery, Box, Drawer } from "@mui/material";
-import SidebarItems from "./SidebarItems";
+'use client';
 
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
+import type { ActiveMembershipContext } from '@/lib/auth/session';
 
-interface ItemType {
+import SidebarItems from './SidebarItems';
+
+type SidebarProps = {
+  context: ActiveMembershipContext;
+  width: number;
   isMobileSidebarOpen: boolean;
-  onSidebarClose: (event: React.MouseEvent<HTMLElement>) => void;
+  onSidebarClose: () => void;
   isSidebarOpen: boolean;
-}
+};
 
-const MSidebar = ({
+const scrollbarStyles = {
+  '&::-webkit-scrollbar': {
+    width: '6px',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: '#d4d8e1',
+    borderRadius: '12px',
+  },
+};
+
+const Sidebar = ({
+  context,
+  width,
   isMobileSidebarOpen,
   onSidebarClose,
   isSidebarOpen,
-}: ItemType) => {
-  const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up("lg"));
-
-  const sidebarWidth = "270px";
-
-  // Custom CSS for short scrollbar
-  const scrollbarStyles = {
-    '&::-webkit-scrollbar': {
-      width: '7px',
-
-    },
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: '#eff2f7',
-      borderRadius: '15px',
-    },
-  };
-
+}: SidebarProps) => {
+  const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'));
 
   if (lgUp) {
     return (
       <Box
+        component="nav"
         sx={{
-          width: sidebarWidth,
+          width,
           flexShrink: 0,
         }}
       >
-        {/* ------------------------------------------- */}
-        {/* Sidebar for desktop */}
-        {/* ------------------------------------------- */}
         <Drawer
           anchor="left"
           open={isSidebarOpen}
           variant="permanent"
-          slotProps={{
-            paper: {
-              sx: {
-                boxSizing: "border-box",
-                ...scrollbarStyles,
-                width: sidebarWidth,
-              },
-            }
+          PaperProps={{
+            sx: {
+              boxSizing: 'border-box',
+              width,
+              borderRight: 'none',
+              backgroundColor: 'background.paper',
+              ...scrollbarStyles,
+            },
           }}
         >
-          {/* ------------------------------------------- */}
-          {/* Sidebar Box */}
-          {/* ------------------------------------------- */}
-          <Box
-            sx={{
-              height: "100%",
-            }}
-          >
-
-            <Box>
-              {/* ------------------------------------------- */}
-              {/* Sidebar Items */}
-              {/* ------------------------------------------- */}
-              <SidebarItems />
-            </Box>
-          </Box>
+          <SidebarItems context={context} />
         </Drawer>
-      </Box >
+      </Box>
     );
   }
 
@@ -83,35 +71,19 @@ const MSidebar = ({
       open={isMobileSidebarOpen}
       onClose={onSidebarClose}
       variant="temporary"
-
-      slotProps={{
-        paper: {
-          sx: {
-            boxShadow: (theme) => theme.shadows[8],
-            ...scrollbarStyles,
-          },
-        }
+      ModalProps={{ keepMounted: true }}
+      PaperProps={{
+        sx: {
+          boxSizing: 'border-box',
+          width,
+          boxShadow: (theme) => theme.shadows[8],
+          ...scrollbarStyles,
+        },
       }}
     >
-      {/* ------------------------------------------- */}
-      {/* Sidebar Box */}
-      {/* ------------------------------------------- */}
-      <Box>
-        {/* ------------------------------------------- */}
-        {/* Sidebar Items */}
-        {/* ------------------------------------------- */}
-        <SidebarItems />
-      </Box>
-      {/* ------------------------------------------- */}
-      {/* Sidebar For Mobile */}
-      {/* ------------------------------------------- */}
+      <SidebarItems context={context} onNavigate={onSidebarClose} />
     </Drawer>
   );
 };
 
-export default MSidebar;
-
-
-
-
-
+export default Sidebar;

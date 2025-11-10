@@ -1,97 +1,120 @@
-import React, { useState } from "react";
-import Link from "next/link";
-import {
-  Avatar,
-  Box,
-  Menu,
-  Button,
-  IconButton,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
+'use client';
 
-import { IconListCheck, IconMail, IconUser } from "@tabler/icons-react";
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
+import { IconLogout, IconSettings, IconUser } from '@tabler/icons-react';
 
-const Profile = () => {
-  const [anchorEl2, setAnchorEl2] = useState(null);
-  const handleClick2 = (event: any) => {
-    setAnchorEl2(event.currentTarget);
+import type { ActiveMembershipContext } from '@/lib/auth/session';
+import { signOut } from '@/lib/auth/actions';
+
+type ProfileMenuProps = {
+  context: ActiveMembershipContext;
+};
+
+const Profile = ({ context }: ProfileMenuProps) => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [isPending, startTransition] = React.useTransition();
+
+  const avatarSrc = context.profile?.avatar_url ?? undefined;
+  const avatarFallback = context.profile?.full_name
+    ? context.profile.full_name
+        .split(' ')
+        .map((part) => part[0])
+        .join('')
+        .substring(0, 2)
+        .toUpperCase()
+    : context.user.email?.substring(0, 2).toUpperCase();
+
+  const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
   };
-  const handleClose2 = () => {
-    setAnchorEl2(null);
+
+  const handleClose = () => setAnchorEl(null);
+
+  const handleSignOut = () => {
+    handleClose();
+    startTransition(async () => {
+      await signOut();
+    });
   };
 
   return (
     <Box>
       <IconButton
         size="large"
-        aria-label="show 11 new notifications"
         color="inherit"
-        aria-controls="msgs-menu"
         aria-haspopup="true"
+        onClick={handleOpen}
         sx={{
-          ...(typeof anchorEl2 === "object" && {
-            color: "primary.main",
+          ...(anchorEl && {
+            color: 'primary.main',
           }),
         }}
-        onClick={handleClick2}
       >
         <Avatar
-          src="/images/profile/user-1.jpg"
-          alt="image"
-          sx={{
-            width: 35,
-            height: 35,
-          }}
-        />
+          src={avatarSrc}
+          alt={context.profile?.full_name ?? context.user.email ?? 'profile'}
+          sx={{ width: 36, height: 36, bgcolor: 'primary.main', fontWeight: 600 }}
+        >
+          {avatarFallback}
+        </Avatar>
       </IconButton>
-      {/* ------------------------------------------- */}
-      {/* Message Dropdown */}
-      {/* ------------------------------------------- */}
+
       <Menu
-        id="msgs-menu"
-        anchorEl={anchorEl2}
-        keepMounted
-        open={Boolean(anchorEl2)}
-        onClose={handleClose2}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        sx={{
-          "& .MuiMenu-paper": {
-            width: "200px",
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        PaperProps={{
+          sx: {
+            minWidth: 220,
+            mt: 1,
+            px: 1,
           },
         }}
       >
-        <MenuItem>
-          <ListItemIcon>
-            <IconUser width={20} />
-          </ListItemIcon>
-          <ListItemText>My Profile</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <IconMail width={20} />
-          </ListItemIcon>
-          <ListItemText>My Account</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <IconListCheck width={20} />
-          </ListItemIcon>
-          <ListItemText>My Tasks</ListItemText>
-        </MenuItem>
-        <Box mt={1} py={1} px={2}>
-          <Button
-            href="/authentication/login"
-            variant="outlined"
-            color="primary"
-            component={Link}
-            fullWidth
-          >
-            Logout
-          </Button>
+        <Box px={1.5} py={1}>
+          <Typography variant="subtitle2" fontWeight={600}>
+            {context.profile?.full_name ?? context.user.email}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            {context.user.email}
+          </Typography>
         </Box>
+
+        <Divider sx={{ my: 1 }} />
+
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <IconUser size={18} stroke={1.5} />
+          </ListItemIcon>
+          <ListItemText primary="My profile" />
+        </MenuItem>
+
+        <MenuItem onClick={handleClose} component="a" href="/settings">
+          <ListItemIcon>
+            <IconSettings size={18} stroke={1.5} />
+          </ListItemIcon>
+          <ListItemText primary="Settings" />
+        </MenuItem>
+
+        <Divider sx={{ my: 1 }} />
+
+        <MenuItem onClick={handleSignOut} disabled={isPending}>
+          <ListItemIcon>
+            <IconLogout size={18} stroke={1.5} />
+          </ListItemIcon>
+          <ListItemText primary="Sign out" />
+        </MenuItem>
       </Menu>
     </Box>
   );

@@ -1,78 +1,45 @@
+import type { ReactNode } from 'react';
 import {
-  IconAperture,
-  IconCopy,
-  IconLayoutDashboard,
-  IconLogin,
-  IconMoodHappy,
-  IconTypography,
-  IconUserPlus,
-} from "@tabler/icons-react";
+  IconGauge,
+  IconUsers,
+  IconFileDescription,
+  IconReceipt2,
+  IconSettings,
+} from '@tabler/icons-react';
 
-import { uniqueId } from "lodash";
+export type SidebarNavItem = {
+  title: string;
+  href: string;
+  icon: ReactNode;
+  exact?: boolean;
+  badge?: string;
+};
 
-const Menuitems = [
+export const sidebarNavItems: SidebarNavItem[] = [
   {
-    navlabel: true,
-    subheader: "HOME",
-  },
-
-  {
-    id: uniqueId(),
-    title: "Dashboard",
-    icon: IconLayoutDashboard,
-    href: "/",
+    title: 'Dashboard',
+    href: '/',
+    icon: <IconGauge size={18} stroke={1.5} />,
+    exact: true,
   },
   {
-    navlabel: true,
-    subheader: "UTILITIES",
+    title: 'Clients',
+    href: '/clients',
+    icon: <IconUsers size={18} stroke={1.5} />,
   },
   {
-    id: uniqueId(),
-    title: "Typography",
-    icon: IconTypography,
-    href: "/utilities/typography",
+    title: 'Templates',
+    href: '/templates',
+    icon: <IconFileDescription size={18} stroke={1.5} />,
   },
   {
-    id: uniqueId(),
-    title: "Shadow",
-    icon: IconCopy,
-    href: "/utilities/shadow",
+    title: 'Offers',
+    href: '/offers',
+    icon: <IconReceipt2 size={18} stroke={1.5} />,
   },
   {
-    navlabel: true,
-    subheader: "AUTH",
+    title: 'Settings',
+    href: '/settings',
+    icon: <IconSettings size={18} stroke={1.5} />,
   },
-  {
-    id: uniqueId(),
-    title: "Login",
-    icon: IconLogin,
-    href: "/authentication/login",
-  },
-  {
-    id: uniqueId(),
-    title: "Register",
-    icon: IconUserPlus,
-    href: "/authentication/register",
-  },
-  {
-    navlabel: true,
-    subheader: " EXTRA",
-  },
-  {
-    id: uniqueId(),
-    title: "Icons",
-    icon: IconMoodHappy,
-    href: "/icons",
-  },
-  {
-    id: uniqueId(),
-    title: "Sample Page",
-    icon: IconAperture,
-    href: "/sample-page",
-  },
-
 ];
-
-export default Menuitems;
-
-
