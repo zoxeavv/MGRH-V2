@@ -1,79 +1,82 @@
-import React from 'react';
-import { Box, AppBar, Toolbar, styled, Stack, IconButton, Badge, Button } from '@mui/material';
-import PropTypes from 'prop-types';
-import Link from 'next/link';
-// components
-import Profile from './Profile';
-import { IconBellRinging, IconMenu } from '@tabler/icons-react';
+"use client";
 
-interface ItemType {
-  toggleMobileSidebar:  (event: React.MouseEvent<HTMLElement>) => void;
-}
+import Link from "next/link";
 
-const Header = ({toggleMobileSidebar}: ItemType) => {
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import {
+  IconBellRinging,
+  IconMenu2,
+  IconSearch,
+} from "@tabler/icons-react";
 
-  // const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
-  // const lgDown = useMediaQuery((theme) => theme.breakpoints.down('lg'));
+import ProfileMenu from "./Profile";
 
-
-  const AppBarStyled = styled(AppBar)(({ theme }) => ({
-    boxShadow: 'none',
-    background: theme.palette.background.paper,
-    justifyContent: 'center',
-    backdropFilter: 'blur(4px)',
-    [theme.breakpoints.up('lg')]: {
-      minHeight: '70px',
-    },
-  }));
-  const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
-    width: '100%',
-    color: theme.palette.text.secondary,
-  }));
-
-  return (
-    <AppBarStyled position="sticky" color="default">
-      <ToolbarStyled>
-        <IconButton
-          color="inherit"
-          aria-label="menu"
-          onClick={toggleMobileSidebar}
-          sx={{
-            display: {
-              lg: "none",
-              xs: "inline",
-            },
-          }}
-        >
-          <IconMenu width="20" height="20" />
-        </IconButton>
-
-
-        <IconButton
-          size="large"
-          aria-label="show 11 new notifications"
-          color="inherit"
-          aria-controls="msgs-menu"
-          aria-haspopup="true"
-        >
-          <Badge variant="dot" color="primary">
-            <IconBellRinging size="21" stroke="1.5" />
-          </Badge>
-
-        </IconButton>
-        <Box flexGrow={1} />
-        <Stack spacing={1} direction="row" alignItems="center">
-          <Button variant="contained" component={Link} href="/authentication/login"   disableElevation color="primary" >
-            Login
-          </Button>
-          <Profile />
-        </Stack>
-      </ToolbarStyled>
-    </AppBarStyled>
-  );
+type HeaderProps = {
+  onToggleSidebar: () => void;
+  className?: string;
 };
 
-Header.propTypes = {
-  sx: PropTypes.object,
+const Header = ({ onToggleSidebar, className }: HeaderProps) => {
+  return (
+    <header
+      className={cn(
+        "sticky top-0 z-40 border-b border-border/80 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60",
+        className
+      )}
+    >
+      <div className="mx-auto flex h-16 w-full max-w-6xl items-center gap-3 px-4">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="shrink-0 lg:hidden"
+          onClick={onToggleSidebar}
+          aria-label="Open navigation"
+        >
+          <IconMenu2 className="h-5 w-5" />
+        </Button>
+
+        <form
+          role="search"
+          className="relative hidden flex-1 items-center sm:flex"
+        >
+          <label htmlFor="global-search" className="sr-only">
+            Search
+          </label>
+          <IconSearch className="pointer-events-none absolute left-3 h-4 w-4 text-muted-foreground" />
+          <Input
+            id="global-search"
+            name="query"
+            placeholder="Search clients, projects, or tasks…"
+            className="w-full max-w-md rounded-full pl-9"
+            autoComplete="off"
+          />
+        </form>
+
+        <div className="ml-auto flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative"
+            aria-label="View notifications"
+          >
+            <IconBellRinging className="h-5 w-5" />
+            <span className="absolute right-2 top-2 inline-flex h-2 w-2 rounded-full bg-accent shadow ring-2 ring-background" />
+          </Button>
+          <Button
+            variant="secondary"
+            size="sm"
+            asChild
+            className="hidden sm:inline-flex"
+          >
+            <Link href="/authentication/login">Log in</Link>
+          </Button>
+          <ProfileMenu />
+        </div>
+      </div>
+    </header>
+  );
 };
 
 export default Header;

@@ -1,26 +1,47 @@
-import { Box, Typography, Button } from '@mui/material';
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from "next/image";
+import Link from "next/link";
 
-export const Upgrade = () => {
-    return (
-        <Box
-            display='flex'
-            alignItems="center"
-            gap={2}
-            sx={{ mt: 3, p: 3, bgcolor: 'primary.light', borderRadius: '8px' }}
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+type UpgradeProps = {
+  className?: string;
+};
+
+export const Upgrade = ({ className }: UpgradeProps) => {
+  return (
+    <div
+      className={cn(
+        "relative flex overflow-hidden rounded-2xl border border-brand/20 bg-brand-soft/80 p-5 text-sm text-slate-700 shadow-card",
+        className
+      )}
+      role="complementary"
+      aria-label="Create an account prompt"
+    >
+      <div className="flex flex-1 flex-col gap-3">
+        <p className="text-base font-semibold text-slate-800">
+          Haven&apos;t created an account?
+        </p>
+        <p className="text-sm text-slate-600">
+          Start collaborating with your team in seconds.
+        </p>
+        <Button
+          asChild
+          size="sm"
+          className="w-fit"
+          aria-label="Create a free account"
         >
-            <>
-                <Box >
-                    <Typography variant="h5" sx={{ width: "80px" }} fontSize='16px' mb={1}>Haven&apos;t account ?</Typography>
-                    <Button color="primary" target="_blank" disableElevation component={Link} href="/authentication/register" variant="contained" aria-label="logout" size="small">
-                        Sign Up
-                    </Button>
-                </Box>
-                <Box mt="-35px" >
-                    <Image alt="Remy Sharp" src='/images/backgrounds/rocket.png' width={100} height={100} />
-                </Box>
-            </>
-        </Box>
-    );
+          <Link href="/authentication/register">Sign up</Link>
+        </Button>
+      </div>
+      <Image
+        src="/images/backgrounds/rocket.png"
+        alt=""
+        width={140}
+        height={140}
+        className="pointer-events-none absolute -bottom-10 right-0 h-40 w-40 select-none object-contain opacity-90"
+        priority
+      />
+    </div>
+  );
 };

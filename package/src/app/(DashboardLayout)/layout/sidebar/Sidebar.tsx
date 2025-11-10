@@ -1,117 +1,60 @@
-import { useMediaQuery, Box, Drawer } from "@mui/material";
+import * as React from "react";
+
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
+
 import SidebarItems from "./SidebarItems";
 
+type SidebarProps = {
+  isMobileOpen: boolean;
+  onMobileOpenChange: (open: boolean) => void;
+};
 
+const Sidebar = ({ isMobileOpen, onMobileOpenChange }: SidebarProps) => {
+  React.useEffect(() => {
+    const main = document.getElementById("content");
+    if (!main) {
+      return;
+    }
 
-interface ItemType {
-  isMobileSidebarOpen: boolean;
-  onSidebarClose: (event: React.MouseEvent<HTMLElement>) => void;
-  isSidebarOpen: boolean;
-}
+    if (isMobileOpen) {
+      main.setAttribute("inert", "");
+      main.setAttribute("aria-hidden", "true");
+      document.body.style.setProperty("overflow", "hidden");
+    } else {
+      main.removeAttribute("inert");
+      main.removeAttribute("aria-hidden");
+      document.body.style.removeProperty("overflow");
+    }
 
-const MSidebar = ({
-  isMobileSidebarOpen,
-  onSidebarClose,
-  isSidebarOpen,
-}: ItemType) => {
-  const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up("lg"));
-
-  const sidebarWidth = "270px";
-
-  // Custom CSS for short scrollbar
-  const scrollbarStyles = {
-    '&::-webkit-scrollbar': {
-      width: '7px',
-
-    },
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: '#eff2f7',
-      borderRadius: '15px',
-    },
-  };
-
-
-  if (lgUp) {
-    return (
-      <Box
-        sx={{
-          width: sidebarWidth,
-          flexShrink: 0,
-        }}
-      >
-        {/* ------------------------------------------- */}
-        {/* Sidebar for desktop */}
-        {/* ------------------------------------------- */}
-        <Drawer
-          anchor="left"
-          open={isSidebarOpen}
-          variant="permanent"
-          slotProps={{
-            paper: {
-              sx: {
-                boxSizing: "border-box",
-                ...scrollbarStyles,
-                width: sidebarWidth,
-              },
-            }
-          }}
-        >
-          {/* ------------------------------------------- */}
-          {/* Sidebar Box */}
-          {/* ------------------------------------------- */}
-          <Box
-            sx={{
-              height: "100%",
-            }}
-          >
-
-            <Box>
-              {/* ------------------------------------------- */}
-              {/* Sidebar Items */}
-              {/* ------------------------------------------- */}
-              <SidebarItems />
-            </Box>
-          </Box>
-        </Drawer>
-      </Box >
-    );
-  }
+    return () => {
+      main.removeAttribute("inert");
+      main.removeAttribute("aria-hidden");
+      document.body.style.removeProperty("overflow");
+    };
+  }, [isMobileOpen]);
 
   return (
-    <Drawer
-      anchor="left"
-      open={isMobileSidebarOpen}
-      onClose={onSidebarClose}
-      variant="temporary"
-
-      slotProps={{
-        paper: {
-          sx: {
-            boxShadow: (theme) => theme.shadows[8],
-            ...scrollbarStyles,
-          },
-        }
-      }}
-    >
-      {/* ------------------------------------------- */}
-      {/* Sidebar Box */}
-      {/* ------------------------------------------- */}
-      <Box>
-        {/* ------------------------------------------- */}
-        {/* Sidebar Items */}
-        {/* ------------------------------------------- */}
+    <>
+      <aside
+        className={cn(
+          "hidden lg:sticky lg:top-0 lg:flex lg:h-dvh lg:w-[18rem] lg:flex-none lg:flex-col lg:border-r lg:border-border/80 lg:bg-card"
+        )}
+      >
         <SidebarItems />
-      </Box>
-      {/* ------------------------------------------- */}
-      {/* Sidebar For Mobile */}
-      {/* ------------------------------------------- */}
-    </Drawer>
+      </aside>
+
+      <Sheet open={isMobileOpen} onOpenChange={onMobileOpenChange}>
+        <SheetContent
+          side="left"
+          aria-label="Primary navigation"
+          className="flex h-dvh w-[calc(100vw-3rem)] max-w-xs flex-col overflow-hidden bg-card p-0 shadow-2xl sm:max-w-sm"
+        >
+          <SidebarItems onNavigate={() => onMobileOpenChange(false)} />
+        </SheetContent>
+      </Sheet>
+    </>
   );
 };
 
-export default MSidebar;
-
-
-
-
-
+export default Sidebar;

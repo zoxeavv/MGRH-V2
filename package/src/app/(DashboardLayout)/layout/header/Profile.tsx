@@ -1,100 +1,91 @@
-import React, { useState } from "react";
+"use client";
+
 import Link from "next/link";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
-  Avatar,
-  Box,
-  Menu,
-  Button,
-  IconButton,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+import {
+  IconChevronDown,
+  IconListCheck,
+  IconMail,
+  IconUser,
+} from "@tabler/icons-react";
 
-import { IconListCheck, IconMail, IconUser } from "@tabler/icons-react";
+type ProfileMenuProps = {
+  className?: string;
+};
 
-const Profile = () => {
-  const [anchorEl2, setAnchorEl2] = useState(null);
-  const handleClick2 = (event: any) => {
-    setAnchorEl2(event.currentTarget);
-  };
-  const handleClose2 = () => {
-    setAnchorEl2(null);
-  };
-
+const ProfileMenu = ({ className }: ProfileMenuProps) => {
   return (
-    <Box>
-      <IconButton
-        size="large"
-        aria-label="show 11 new notifications"
-        color="inherit"
-        aria-controls="msgs-menu"
-        aria-haspopup="true"
-        sx={{
-          ...(typeof anchorEl2 === "object" && {
-            color: "primary.main",
-          }),
-        }}
-        onClick={handleClick2}
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          className={cn(
+            "group flex items-center gap-3 rounded-full px-2 py-1 text-sm font-medium hover:bg-muted/80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+            className
+          )}
+          aria-label="Open profile menu"
+        >
+          <Avatar className="h-9 w-9 ring-2 ring-transparent transition group-hover:ring-brand">
+            <AvatarImage src="/images/profile/user-1.jpg" alt="Amelia Taylor" />
+            <AvatarFallback>AT</AvatarFallback>
+          </Avatar>
+          <div className="hidden text-left sm:block">
+            <p className="text-sm font-semibold text-foreground">
+              Amelia Taylor
+            </p>
+            <p className="text-xs text-muted-foreground">Product Designer</p>
+          </div>
+          <IconChevronDown className="hidden h-4 w-4 sm:block" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align="end"
+        sideOffset={8}
+        className="w-56 rounded-xl shadow-card"
       >
-        <Avatar
-          src="/images/profile/user-1.jpg"
-          alt="image"
-          sx={{
-            width: 35,
-            height: 35,
-          }}
-        />
-      </IconButton>
-      {/* ------------------------------------------- */}
-      {/* Message Dropdown */}
-      {/* ------------------------------------------- */}
-      <Menu
-        id="msgs-menu"
-        anchorEl={anchorEl2}
-        keepMounted
-        open={Boolean(anchorEl2)}
-        onClose={handleClose2}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        sx={{
-          "& .MuiMenu-paper": {
-            width: "200px",
-          },
-        }}
-      >
-        <MenuItem>
-          <ListItemIcon>
-            <IconUser width={20} />
-          </ListItemIcon>
-          <ListItemText>My Profile</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <IconMail width={20} />
-          </ListItemIcon>
-          <ListItemText>My Account</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <IconListCheck width={20} />
-          </ListItemIcon>
-          <ListItemText>My Tasks</ListItemText>
-        </MenuItem>
-        <Box mt={1} py={1} px={2}>
-          <Button
-            href="/authentication/login"
-            variant="outlined"
-            color="primary"
-            component={Link}
-            fullWidth
-          >
-            Logout
-          </Button>
-        </Box>
-      </Menu>
-    </Box>
+        <DropdownMenuLabel className="text-xs uppercase text-muted-foreground">
+          Account
+        </DropdownMenuLabel>
+        <DropdownMenuItem asChild>
+          <Link href="/profile" className="flex items-center gap-2">
+            <IconUser className="h-4 w-4 text-muted-foreground" />
+            Profile
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/inbox" className="flex items-center gap-2">
+            <IconMail className="h-4 w-4 text-muted-foreground" />
+            Messages
+            <DropdownMenuShortcut>⇧⌘M</DropdownMenuShortcut>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/tasks" className="flex items-center gap-2">
+            <IconListCheck className="h-4 w-4 text-muted-foreground" />
+            Tasks
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href="/authentication/login" className="flex items-center gap-2">
+            Sign out
+          </Link>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
-export default Profile;
+export default ProfileMenu;
