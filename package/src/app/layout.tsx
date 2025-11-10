@@ -1,23 +1,18 @@
-"use client";
-import { baselightTheme } from "@/utils/theme/DefaultColors";
-import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import './global.css'
+import type { Metadata } from 'next';
+import './global.css';
+import { AppProviders } from './providers';
+import { plus } from '@/utils/theme/DefaultColors';
 
+export const metadata: Metadata = {
+  title: 'OrbitCRM',
+  description: 'Multi-tenant offers & templates SaaS built with Next.js, Supabase, and Drizzle.',
+};
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>
-        <ThemeProvider theme={baselightTheme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          {children}
-        </ThemeProvider>
+    <html lang="fr">
+      <body className={plus.className}>
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   );

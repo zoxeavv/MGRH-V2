@@ -1,61 +1,46 @@
-'use client'
-import { Grid, Box } from '@mui/material';
-import PageContainer from '@/app/(DashboardLayout)/components/container/PageContainer';
-// components
-import SalesOverview from '@/app/(DashboardLayout)/components/dashboard/SalesOverview';
-import YearlyBreakup from '@/app/(DashboardLayout)/components/dashboard/YearlyBreakup';
-import RecentTransactions from '@/app/(DashboardLayout)/components/dashboard/RecentTransactions';
-import ProductPerformance from '@/app/(DashboardLayout)/components/dashboard/ProductPerformance';
-import Blog from '@/app/(DashboardLayout)/components/dashboard/Blog';
-import MonthlyEarnings from '@/app/(DashboardLayout)/components/dashboard/MonthlyEarnings';
+import Grid from '@mui/material/Unstable_Grid2';
+import { Box, Typography } from '@mui/material';
+import { getActiveMembershipOrRedirect } from '@/lib/auth/session';
+import {
+  getDashboardKpis,
+  getMonthlyRevenue,
+  getRecentActivityFeed,
+} from '@/lib/db/queries/dashboard';
+import { StatsGrid } from './components/dashboard/StatsGrid';
+import { RevenueChart } from './components/dashboard/RevenueChart';
+import { ActivityFeed } from './components/dashboard/ActivityFeed';
 
-const Dashboard = () => {
+export default async function DashboardPage() {
+  const { membership } = await getActiveMembershipOrRedirect();
+  const organizationId = membership.organization_id;
+
+  const [kpis, activityFeed, monthlyRevenue] = await Promise.all([
+    getDashboardKpis(organizationId),
+    getRecentActivityFeed(organizationId),
+    getMonthlyRevenue(organizationId),
+  ]);
+
   return (
-    <PageContainer title="Dashboard" description="this is Dashboard">
+    <Box component="section" sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       <Box>
-        <Grid container spacing={3}>
-          <Grid
-            size={{
-              xs: 12,
-              lg: 8
-            }}>
-            <SalesOverview />
-          </Grid>
-          <Grid
-            size={{
-              xs: 12,
-              lg: 4
-            }}>
-            <Grid container spacing={3}>
-              <Grid size={12}>
-                <YearlyBreakup />
-              </Grid>
-              <Grid size={12}>
-                <MonthlyEarnings />
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid
-            size={{
-              xs: 12,
-              lg: 4
-            }}>
-            <RecentTransactions />
-          </Grid>
-          <Grid
-            size={{
-              xs: 12,
-              lg: 8
-            }}>
-            <ProductPerformance />
-          </Grid>
-          <Grid size={12}>
-            <Blog />
-          </Grid>
-        </Grid>
+        <Typography variant="h4" fontWeight={700} mb={1}>
+          Bonjour 👋
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          Suivez les performances de votre organisation en un coup d’œil.
+        </Typography>
       </Box>
-    </PageContainer>
+
+      <StatsGrid kpis={kpis} />
+
+      <Grid container spacing={3}>
+        <Grid xs={12} md={7}>
+          <RevenueChart data={monthlyRevenue} />
+        </Grid>
+        <Grid xs={12} md={5}>
+          <ActivityFeed items={activityFeed} />
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
-
-export default Dashboard;
