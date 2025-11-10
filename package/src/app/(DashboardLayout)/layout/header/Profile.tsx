@@ -1,100 +1,95 @@
-import React, { useState } from "react";
-import Link from "next/link";
+"use client"
+
+import Link from "next/link"
+
+import { Button } from "@/components/ui/button"
 import {
-  Avatar,
-  Box,
-  Menu,
-  Button,
-  IconButton,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-import { IconListCheck, IconMail, IconUser } from "@tabler/icons-react";
+import {
+  IconListCheck,
+  IconLogout,
+  IconMail,
+  IconUser,
+} from "@tabler/icons-react"
 
-const Profile = () => {
-  const [anchorEl2, setAnchorEl2] = useState(null);
-  const handleClick2 = (event: any) => {
-    setAnchorEl2(event.currentTarget);
-  };
-  const handleClose2 = () => {
-    setAnchorEl2(null);
-  };
-
+export function ProfileMenu() {
   return (
-    <Box>
-      <IconButton
-        size="large"
-        aria-label="show 11 new notifications"
-        color="inherit"
-        aria-controls="msgs-menu"
-        aria-haspopup="true"
-        sx={{
-          ...(typeof anchorEl2 === "object" && {
-            color: "primary.main",
-          }),
-        }}
-        onClick={handleClick2}
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="relative h-10 w-10 rounded-full border border-border/60"
+          aria-label="Open profile menu"
+        >
+          <Avatar className="h-10 w-10">
+            <AvatarImage
+              src="/images/profile/user-1.jpg"
+              alt="Taylor Swift portrait"
+            />
+            <AvatarFallback className="bg-primary/10 text-sm font-semibold text-primary">
+              TS
+            </AvatarFallback>
+          </Avatar>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align="end"
+        className="w-60 rounded-2xl border border-border/60 shadow-card"
       >
-        <Avatar
-          src="/images/profile/user-1.jpg"
-          alt="image"
-          sx={{
-            width: 35,
-            height: 35,
-          }}
-        />
-      </IconButton>
-      {/* ------------------------------------------- */}
-      {/* Message Dropdown */}
-      {/* ------------------------------------------- */}
-      <Menu
-        id="msgs-menu"
-        anchorEl={anchorEl2}
-        keepMounted
-        open={Boolean(anchorEl2)}
-        onClose={handleClose2}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        sx={{
-          "& .MuiMenu-paper": {
-            width: "200px",
-          },
-        }}
-      >
-        <MenuItem>
-          <ListItemIcon>
-            <IconUser width={20} />
-          </ListItemIcon>
-          <ListItemText>My Profile</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <IconMail width={20} />
-          </ListItemIcon>
-          <ListItemText>My Account</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <IconListCheck width={20} />
-          </ListItemIcon>
-          <ListItemText>My Tasks</ListItemText>
-        </MenuItem>
-        <Box mt={1} py={1} px={2}>
-          <Button
-            href="/authentication/login"
-            variant="outlined"
-            color="primary"
-            component={Link}
-            fullWidth
+        <DropdownMenuLabel className="flex flex-col gap-1">
+          <span className="text-sm font-semibold text-foreground">
+            Taylor Swift
+          </span>
+          <span className="text-xs text-muted-foreground">
+            taylor@modernize.io
+          </span>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link
+            href="/profile"
+            className="flex w-full items-center gap-2 text-sm"
           >
-            Logout
-          </Button>
-        </Box>
-      </Menu>
-    </Box>
-  );
-};
+            <IconUser size={16} aria-hidden="true" /> View profile
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link
+            href="/inbox"
+            className="flex w-full items-center gap-2 text-sm"
+          >
+            <IconMail size={16} aria-hidden="true" /> Inbox
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link
+            href="/tasks"
+            className="flex w-full items-center gap-2 text-sm"
+          >
+            <IconListCheck size={16} aria-hidden="true" /> Tasks
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link
+            href="/authentication/login"
+            className="flex w-full items-center gap-2 text-sm font-medium text-destructive"
+          >
+            <IconLogout size={16} aria-hidden="true" /> Log out
+          </Link>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
 
-export default Profile;
+export default ProfileMenu

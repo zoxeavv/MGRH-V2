@@ -1,74 +1,39 @@
-"use client";
-import { styled, Container, Box } from "@mui/material";
-import React, { useState } from "react";
-import Header from "@/app/(DashboardLayout)/layout/header/Header";
-import Sidebar from "@/app/(DashboardLayout)/layout/sidebar/Sidebar";
+"use client"
 
+import * as React from "react"
 
-const MainWrapper = styled("div")(() => ({
-  display: "flex",
-  minHeight: "100vh",
-  width: "100%",
-}));
+import Header from "@/app/(DashboardLayout)/layout/header/Header"
+import Sidebar from "@/app/(DashboardLayout)/layout/sidebar/Sidebar"
 
-const PageWrapper = styled("div")(() => ({
-  display: "flex",
-  flexGrow: 1,
-  paddingBottom: "60px",
-  flexDirection: "column",
-  zIndex: 1,
-  backgroundColor: "transparent",
-}));
-
-interface Props {
-  children: React.ReactNode;
+type DashboardLayoutProps = {
+  children: React.ReactNode
 }
 
+export default function DashboardLayout({ children }: DashboardLayoutProps) {
+  const [mobileSidebarOpen, setMobileSidebarOpen] = React.useState(false)
 
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
-  const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   return (
-    <MainWrapper className="mainwrapper">
-      {/* ------------------------------------------- */}
-      {/* Sidebar */}
-      {/* ------------------------------------------- */}
+    <div className="relative flex min-h-dvh w-full bg-background lg:bg-background/95">
       <Sidebar
-        isSidebarOpen={isSidebarOpen}
-        isMobileSidebarOpen={isMobileSidebarOpen}
-        onSidebarClose={() => setMobileSidebarOpen(false)}
+        mobileOpen={mobileSidebarOpen}
+        onMobileOpenChange={setMobileSidebarOpen}
       />
-      {/* ------------------------------------------- */}
-      {/* Main Wrapper */}
-      {/* ------------------------------------------- */}
-      <PageWrapper className="page-wrapper">
-        {/* ------------------------------------------- */}
-        {/* Header */}
-        {/* ------------------------------------------- */}
-        <Header toggleMobileSidebar={() => setMobileSidebarOpen(true)} />
-        {/* ------------------------------------------- */}
-        {/* PageContent */}
-        {/* ------------------------------------------- */}
-        <Container
-          sx={{
-            paddingTop: "20px",
-            maxWidth: "1200px",
-          }}
+
+      <div
+        data-shell-content
+        className="flex flex-1 flex-col bg-background/70 backdrop-blur-sm transition-[filter]"
+      >
+        <Header onToggleSidebar={() => setMobileSidebarOpen(true)} />
+        <main
+          id="shell-content"
+          tabIndex={-1}
+          className="flex-1 overflow-y-auto pb-10 focus:outline-none"
         >
-          {/* ------------------------------------------- */}
-          {/* Page Route */}
-          {/* ------------------------------------------- */}
-          <Box sx={{ minHeight: "calc(100vh - 170px)" }}>{children}</Box>
-          {/* ------------------------------------------- */}
-          {/* End Page */}
-          {/* ------------------------------------------- */}
-        </Container>
-      </PageWrapper>
-    </MainWrapper>
-  );
+          <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+            {children}
+          </div>
+        </main>
+      </div>
+    </div>
+  )
 }

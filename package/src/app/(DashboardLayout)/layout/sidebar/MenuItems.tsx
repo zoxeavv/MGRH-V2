@@ -6,73 +6,93 @@ import {
   IconMoodHappy,
   IconTypography,
   IconUserPlus,
-} from "@tabler/icons-react";
+} from "@tabler/icons-react"
+import type { ComponentType } from "react"
 
-import { uniqueId } from "lodash";
+type IconType = ComponentType<{ size?: number | string; stroke?: number | string }>
 
-const Menuitems = [
+export type SidebarNavEntry =
+  | {
+      type: "label"
+      id: string
+      label: string
+    }
+  | {
+      type: "link"
+      id: string
+      title: string
+      href: string
+      icon: IconType
+    }
+
+export const sidebarNav: SidebarNavEntry[] = [
   {
-    navlabel: true,
-    subheader: "HOME",
+    type: "label",
+    id: "home",
+    label: "Home",
   },
-
   {
-    id: uniqueId(),
+    type: "link",
+    id: "dashboard",
     title: "Dashboard",
     icon: IconLayoutDashboard,
     href: "/",
   },
   {
-    navlabel: true,
-    subheader: "UTILITIES",
+    type: "label",
+    id: "utilities",
+    label: "Utilities",
   },
   {
-    id: uniqueId(),
+    type: "link",
+    id: "typography",
     title: "Typography",
     icon: IconTypography,
     href: "/utilities/typography",
   },
   {
-    id: uniqueId(),
+    type: "link",
+    id: "shadow",
     title: "Shadow",
     icon: IconCopy,
     href: "/utilities/shadow",
   },
   {
-    navlabel: true,
-    subheader: "AUTH",
+    type: "label",
+    id: "auth",
+    label: "Authentication",
   },
   {
-    id: uniqueId(),
+    type: "link",
+    id: "login",
     title: "Login",
     icon: IconLogin,
     href: "/authentication/login",
   },
   {
-    id: uniqueId(),
+    type: "link",
+    id: "register",
     title: "Register",
     icon: IconUserPlus,
     href: "/authentication/register",
   },
   {
-    navlabel: true,
-    subheader: " EXTRA",
+    type: "label",
+    id: "extra",
+    label: "Extra",
   },
   {
-    id: uniqueId(),
+    type: "link",
+    id: "icons",
     title: "Icons",
     icon: IconMoodHappy,
     href: "/icons",
   },
   {
-    id: uniqueId(),
+    type: "link",
+    id: "sample",
     title: "Sample Page",
     icon: IconAperture,
     href: "/sample-page",
   },
-
-];
-
-export default Menuitems;
-
-
+]
