@@ -1,21 +1,16 @@
-import Link from "next/link";
-import { styled } from "@mui/material";
-import Image from "next/image";
+import Image from "next/image"
+import Link from "next/link"
 
-const LinkStyled = styled(Link)(() => ({
-  height: "70px",
-  width: "180px",
-  overflow: "hidden",
-  display: "block",
-}));
-
-const Logo = () => {
+export function Logo() {
   return (
-    <LinkStyled href="/">
-      <Image src="/images/logos/dark-logo.svg" alt="logo" height={70} width={174} priority />
-    </LinkStyled>
-  );
-};
-
-export default Logo;
+    <Link
+      href="/"
+      className="flex h-12 items-center gap-2 rounded-lg px-2 text-lg font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      aria-label="Modernize home"
+    >
+      <Image src="/images/logos/dark-logo.svg" alt="" width={144} height={48} priority />
+      <span className="sr-only">Modernize</span>
+    </Link>
+  )
+}
   

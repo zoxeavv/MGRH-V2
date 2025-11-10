@@ -1,3 +1,5 @@
+import type { ComponentType } from "react"
+
 import {
   IconAperture,
   IconCopy,
@@ -6,73 +8,86 @@ import {
   IconMoodHappy,
   IconTypography,
   IconUserPlus,
-} from "@tabler/icons-react";
+} from "@tabler/icons-react"
 
-import { uniqueId } from "lodash";
+export type NavItem = {
+  id: string
+  title: string
+  href: string
+  icon: ComponentType<{ className?: string; size?: number | string }>
+}
 
-const Menuitems = [
-  {
-    navlabel: true,
-    subheader: "HOME",
-  },
+export type NavSection = {
+  id: string
+  label: string
+  items: NavItem[]
+}
 
+export const navSections: NavSection[] = [
   {
-    id: uniqueId(),
-    title: "Dashboard",
-    icon: IconLayoutDashboard,
-    href: "/",
+    id: "home",
+    label: "Home",
+    items: [
+      {
+        id: "dashboard",
+        title: "Dashboard",
+        icon: IconLayoutDashboard,
+        href: "/",
+      },
+    ],
   },
   {
-    navlabel: true,
-    subheader: "UTILITIES",
+    id: "utilities",
+    label: "Utilities",
+    items: [
+      {
+        id: "typography",
+        title: "Typography",
+        icon: IconTypography,
+        href: "/utilities/typography",
+      },
+      {
+        id: "shadow",
+        title: "Shadow",
+        icon: IconCopy,
+        href: "/utilities/shadow",
+      },
+    ],
   },
   {
-    id: uniqueId(),
-    title: "Typography",
-    icon: IconTypography,
-    href: "/utilities/typography",
+    id: "auth",
+    label: "Authentication",
+    items: [
+      {
+        id: "login",
+        title: "Login",
+        icon: IconLogin,
+        href: "/authentication/login",
+      },
+      {
+        id: "register",
+        title: "Register",
+        icon: IconUserPlus,
+        href: "/authentication/register",
+      },
+    ],
   },
   {
-    id: uniqueId(),
-    title: "Shadow",
-    icon: IconCopy,
-    href: "/utilities/shadow",
+    id: "extra",
+    label: "Extra",
+    items: [
+      {
+        id: "icons",
+        title: "Icons",
+        icon: IconMoodHappy,
+        href: "/icons",
+      },
+      {
+        id: "sample",
+        title: "Sample Page",
+        icon: IconAperture,
+        href: "/sample-page",
+      },
+    ],
   },
-  {
-    navlabel: true,
-    subheader: "AUTH",
-  },
-  {
-    id: uniqueId(),
-    title: "Login",
-    icon: IconLogin,
-    href: "/authentication/login",
-  },
-  {
-    id: uniqueId(),
-    title: "Register",
-    icon: IconUserPlus,
-    href: "/authentication/register",
-  },
-  {
-    navlabel: true,
-    subheader: " EXTRA",
-  },
-  {
-    id: uniqueId(),
-    title: "Icons",
-    icon: IconMoodHappy,
-    href: "/icons",
-  },
-  {
-    id: uniqueId(),
-    title: "Sample Page",
-    icon: IconAperture,
-    href: "/sample-page",
-  },
-
-];
-
-export default Menuitems;
-
-
+]
