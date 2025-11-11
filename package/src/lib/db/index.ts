@@ -17,7 +17,8 @@ export async function getDb() {
     const schema = await import('./schema');
 
     if (!process.env.SUPABASE_DB_URL) {
-      throw new Error('SUPABASE_DB_URL environment variable is not set');
+      console.warn('SUPABASE_DB_URL environment variable is not set. Database operations will fail.');
+      return null;
     }
 
     const connectionString = process.env.SUPABASE_DB_URL;
@@ -26,12 +27,15 @@ export async function getDb() {
 
     return db;
   } catch (error: any) {
+    console.error('Error initializing database:', error);
+    
     if (error.code === 'MODULE_NOT_FOUND') {
-      throw new Error(
-        'Database packages not installed. Please run: npm install drizzle-orm postgres-js'
-      );
+      console.error('Database packages not installed. Please run: npm install drizzle-orm postgres-js');
+      return null;
     }
-    throw error;
+    
+    // Return null instead of throwing to allow graceful degradation
+    return null;
   }
 }
 
