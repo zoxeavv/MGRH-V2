@@ -58,7 +58,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
                 Database Error: {this.state.error?.message}
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-                This usually means the database migrations haven't been run yet.
+                This usually means the database migrations haven&apos;t been run yet.
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                 Please run: <code>npm run db:push</code>
