@@ -1,3 +1,24 @@
+# 🔧 CORRECTIONS RAPIDES - Copiez-collez ces commandes
+
+## Commande unique pour tout corriger :
+
+```bash
+cd /Users/thier/Ehnsm/Modernize-Nextjs-Free/package && \
+# Corriger schema.ts - Supprimer le doublon et renommer
+sed -i '' '26,33d' src/lib/db/schema.ts && \
+sed -i '' 's/export const users = pgTable/export const crmUsers = pgTable/g' src/lib/db/schema.ts && \
+sed -i '' "s/'users'/'crm_users'/g" src/lib/db/schema.ts && \
+sed -i '' 's/users_email_unique/crm_users_email_unique/g' src/lib/db/schema.ts && \
+# Corriger postcss.config.js
+echo 'module.exports = { plugins: { autoprefixer: {} } };' > postcss.config.js && \
+echo "✅ Fichiers corrigés ! Maintenant corrigez Header.tsx manuellement ou utilisez la commande suivante"
+```
+
+## Pour Header.tsx, utilisez cette commande :
+
+```bash
+cd /Users/thier/Ehnsm/Modernize-Nextjs-Free/package && \
+cat > src/app/\(DashboardLayout\)/layout/header/Header.tsx << 'HEADEREOF'
 'use client';
 
 import React from 'react';
@@ -75,3 +96,14 @@ const Header = ({ toggleMobileSidebar }: ItemType) => {
 };
 
 export default Header;
+HEADEREOF
+echo "✅ Header.tsx corrigé !"
+```
+
+## Ensuite, videz le cache et redémarrez :
+
+```bash
+cd /Users/thier/Ehnsm/Modernize-Nextjs-Free/package && \
+rm -rf .next && \
+npm run dev
+```

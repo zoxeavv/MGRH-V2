@@ -1,3 +1,10 @@
+#!/bin/bash
+# Script simple pour corriger Header.tsx
+# Utilisez: bash fix-header.sh
+
+cd /Users/thier/Ehnsm/Modernize-Nextjs-Free/package
+
+cat > "src/app/(DashboardLayout)/layout/header/Header.tsx" << 'EOFHEADER'
 'use client';
 
 import React from 'react';
@@ -75,3 +82,6 @@ const Header = ({ toggleMobileSidebar }: ItemType) => {
 };
 
 export default Header;
+EOFHEADER
+
+echo "✅ Header.tsx corrigé !"

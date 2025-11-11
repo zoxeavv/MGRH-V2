@@ -16,17 +16,21 @@
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.14.0",
     "@emotion/server": "^11.11.0",
-    "@emotion/styled": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.0.1",
     "@mui/lab": "^7.0.0-beta.10",
-    "@mui/material": "^7.0.1",
+    "@mui/material": "^7.3.5",
+    "@supabase/ssr": "^0.7.0",
     "@tabler/icons-react": "^3.33.0",
     "@types/node": "^20.2.3",
     "apexcharts": "4.7.0",
+    "drizzle-kit": "^0.31.6",
+    "drizzle-orm": "^0.44.7",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
     "lodash": "^4.17.21",
     "next": "^15.1.7",
+    "postgres": "^3.4.7",
     "react": "19.1.0",
     "react-apexcharts": "1.7.0",
     "react-dom": "19.1.0",
@@ -36,6 +40,7 @@
   },
   "devDependencies": {
     "@types/lodash": "4.14.196",
-    "@types/react-syntax-highlighter": "^15.5.13"
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "autoprefixer": "^10.4.22"
   }
 }
