@@ -1,9 +1,11 @@
 /** @type {import('next').NextConfig} */
+const path = require('path');
+
 const nextConfig = {
   reactStrictMode: true,
   images: { unoptimized: true },
   // Fix workspace root warning
-  outputFileTracingRoot: require('path').join(__dirname),
+  outputFileTracingRoot: path.join(__dirname),
 };
 
 module.exports = nextConfig;
