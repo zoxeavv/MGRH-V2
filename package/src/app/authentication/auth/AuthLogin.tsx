@@ -1,4 +1,6 @@
-import React from "react";
+'use client';
+
+import React, { useActionState } from "react";
 import {
   Box,
   Typography,
@@ -7,92 +9,124 @@ import {
   Button,
   Stack,
   Checkbox,
+  Alert,
 } from "@mui/material";
 import Link from "next/link";
-
 import CustomTextField from "@/app/(DashboardLayout)/components/forms/theme-elements/CustomTextField";
+import { loginAction, type AuthActionState } from "@/app/authentication/actions";
 
-interface loginType {
+type LoginProps = {
   title?: string;
   subtitle?: React.ReactNode;
   subtext?: React.ReactNode;
-}
+  redirectTo?: string;
+};
 
-const AuthLogin = ({ title, subtitle, subtext }: loginType) => (
-  <>
-    {title ? (
-      <Typography fontWeight="700" variant="h2" mb={1}>
-        {title}
-      </Typography>
-    ) : null}
+const INITIAL_STATE: AuthActionState = { status: "idle" };
 
-    {subtext}
+const AuthLogin = ({ title, subtitle, subtext, redirectTo }: LoginProps) => {
+  const [state, formAction, pending] = useActionState(loginAction, INITIAL_STATE);
 
-    <Stack>
-      <Box>
-        <Typography
-          variant="subtitle1"
-          fontWeight={600}
-          component="label"
-          htmlFor="username"
-          mb="5px"
-        >
-          Username
+  return (
+    <>
+      {title ? (
+        <Typography fontWeight={700} variant="h2" mb={1}>
+          {title}
         </Typography>
-        <CustomTextField variant="outlined" fullWidth />
-      </Box>
-      <Box mt="25px">
-        <Typography
-          variant="subtitle1"
-          fontWeight={600}
-          component="label"
-          htmlFor="password"
-          mb="5px"
-        >
-          Password
-        </Typography>
-        <CustomTextField type="password" variant="outlined" fullWidth />
-      </Box>
-      <Stack
-        justifyContent="space-between"
-        direction="row"
-        alignItems="center"
-        my={2}
-      >
-        <FormGroup>
-          <FormControlLabel
-            control={<Checkbox defaultChecked />}
-            label="Remeber this Device"
+      ) : null}
+
+      {subtext}
+
+      {state.status === "error" ? (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {state.message}
+        </Alert>
+      ) : null}
+
+      <Stack component="form" action={formAction} noValidate spacing={0}>
+        <input type="hidden" name="redirectTo" value={redirectTo ?? ""} />
+        <Box>
+          <Typography
+            variant="subtitle1"
+            fontWeight={600}
+            component="label"
+            htmlFor="email"
+            mb="5px"
+          >
+            Email
+          </Typography>
+          <CustomTextField
+            id="email"
+            name="email"
+            type="email"
+            variant="outlined"
+            fullWidth
+            required
+            autoComplete="email"
+            disabled={pending}
           />
-        </FormGroup>
-        <Typography
-          component={Link}
-          href="/"
-          fontWeight="500"
-          sx={{
-            textDecoration: "none",
-            color: "primary.main",
-          }}
+        </Box>
+        <Box mt="25px">
+          <Typography
+            variant="subtitle1"
+            fontWeight={600}
+            component="label"
+            htmlFor="password"
+            mb="5px"
+          >
+            Password
+          </Typography>
+          <CustomTextField
+            id="password"
+            name="password"
+            type="password"
+            variant="outlined"
+            fullWidth
+            required
+            autoComplete="current-password"
+            disabled={pending}
+          />
+        </Box>
+        <Stack
+          justifyContent="space-between"
+          direction="row"
+          alignItems="center"
+          my={2}
         >
-          Forgot Password ?
-        </Typography>
+          <FormGroup>
+            <FormControlLabel
+              control={<Checkbox defaultChecked disabled={pending} />}
+              label="Remember this device"
+            />
+          </FormGroup>
+          <Typography
+            component={Link}
+            href="/authentication/reset"
+            fontWeight={500}
+            sx={{
+              textDecoration: "none",
+              color: "primary.main",
+            }}
+          >
+            Forgot Password?
+          </Typography>
+        </Stack>
+        <Box>
+          <Button
+            color="primary"
+            variant="contained"
+            size="large"
+            fullWidth
+            type="submit"
+            disabled={pending}
+          >
+            {pending ? "Signing in..." : "Sign In"}
+          </Button>
+        </Box>
       </Stack>
-    </Stack>
-    <Box>
-      <Button
-        color="primary"
-        variant="contained"
-        size="large"
-        fullWidth
-        component={Link}
-        href="/"
-        type="submit"
-      >
-        Sign In
-      </Button>
-    </Box>
-    {subtitle}
-  </>
-);
+      {subtitle}
+    </>
+  );
+};
 
 export default AuthLogin;

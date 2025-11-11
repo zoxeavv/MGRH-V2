@@ -1,23 +1,23 @@
-// import { Helmet } from 'react-helmet';
-import react from 'react'
+import React from "react";
 
-
-type Props = {
+type PageContainerProps = {
   description?: string;
   children: React.ReactNode;
   title?: string;
 };
 
-const PageContainer = ({ title, description, children }: Props) => (
-
+const PageContainer = ({
+  title,
+  description,
+  children,
+}: PageContainerProps) => (
   <div>
-
-    <title>{title}</title>
-    <meta name="description" content={description} />
-
+    {title ? <title>{title}</title> : null}
+    {description ? (
+      <meta name="description" content={description} />
+    ) : null}
     {children}
   </div>
-
 );
 
 export default PageContainer;

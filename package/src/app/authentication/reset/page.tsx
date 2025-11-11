@@ -1,17 +1,14 @@
 "use client";
+
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { Grid, Box, Card, Stack, Typography } from "@mui/material";
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
 import Logo from "@/app/(DashboardLayout)/layout/shared/logo/Logo";
-import AuthLogin from "../auth/AuthLogin";
+import AuthReset from "../auth/AuthReset";
 
-const Login2 = () => {
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") ?? "/";
-
+const ResetPage = () => {
   return (
-    <PageContainer title="Login" description="Sign in to CardStacks CRM">
+    <PageContainer title="Reset Password" description="Reset your CardStacks CRM password.">
       <Box
         sx={{
           position: "relative",
@@ -27,12 +24,7 @@ const Login2 = () => {
           },
         }}
       >
-        <Grid
-          container
-          spacing={0}
-          justifyContent="center"
-          sx={{ height: "100vh" }}
-        >
+        <Grid container spacing={0} justifyContent="center" sx={{ height: "100vh" }}>
           <Grid
             display="flex"
             justifyContent="center"
@@ -44,15 +36,11 @@ const Login2 = () => {
               xl: 3,
             }}
           >
-            <Card
-              elevation={9}
-              sx={{ p: 4, zIndex: 1, width: "100%", maxWidth: "500px" }}
-            >
+            <Card elevation={9} sx={{ p: 4, zIndex: 1, width: "100%", maxWidth: "500px" }}>
               <Box display="flex" alignItems="center" justifyContent="center">
                 <Logo />
               </Box>
-              <AuthLogin
-                redirectTo={redirectTo}
+              <AuthReset
                 subtext={
                   <Typography
                     variant="subtitle1"
@@ -60,33 +48,24 @@ const Login2 = () => {
                     color="textSecondary"
                     mb={1}
                   >
-                    Your Social Campaigns
+                    Enter the email associated with your account and we&apos;ll send a reset link.
                   </Typography>
                 }
                 subtitle={
-                  <Stack
-                    direction="row"
-                    spacing={1}
-                    justifyContent="center"
-                    mt={3}
-                  >
-                    <Typography
-                      color="textSecondary"
-                      variant="h6"
-                      fontWeight="500"
-                    >
-                      New to CardStacks?
+                  <Stack direction="row" spacing={1} justifyContent="center" mt={3}>
+                    <Typography color="textSecondary" variant="h6" fontWeight={500}>
+                      Remember your password?
                     </Typography>
                     <Typography
                       component={Link}
-                      href="/authentication/register"
-                      fontWeight="500"
+                      href="/authentication/login"
+                      fontWeight={500}
                       sx={{
                         textDecoration: "none",
                         color: "primary.main",
                       }}
                     >
-                      Create an account
+                      Back to login
                     </Typography>
                   </Stack>
                 }
@@ -98,4 +77,5 @@ const Login2 = () => {
     </PageContainer>
   );
 };
-export default Login2;
+
+export default ResetPage;

@@ -1,178 +1,176 @@
+const avatarPaths = {
+  user1: "/images/profile/user-1.jpg",
+  user2: "/images/profile/user-2.jpg",
+  user3: "/images/profile/user-3.jpg",
+  user4: "/images/profile/user-4.jpg",
+} as const;
 
-import img1 from 'src/assets/images/profile/user-1.jpg';
-import img2 from 'src/assets/images/profile/user-2.jpg';
-import img3 from 'src/assets/images/profile/user-3.jpg';
-import img4 from 'src/assets/images/profile/user-4.jpg';
+const iconPaths = {
+  account: "/images/svgs/icon-account.svg",
+  inbox: "/images/svgs/icon-inbox.svg",
+  tasks: "/images/svgs/icon-tasks.svg",
+} as const;
 
-import icon1 from 'src/assets/images/svgs/icon-account.svg'
-import icon2 from 'src/assets/images/svgs/icon-inbox.svg'
-import icon3 from 'src/assets/images/svgs/icon-tasks.svg'
+const dropdownIcons = {
+  chat: "/images/svgs/icon-dd-chat.svg",
+  cart: "/images/svgs/icon-dd-cart.svg",
+  invoice: "/images/svgs/icon-dd-invoice.svg",
+  date: "/images/svgs/icon-dd-date.svg",
+  mobile: "/images/svgs/icon-dd-mobile.svg",
+  lifebuoy: "/images/svgs/icon-dd-lifebuoy.svg",
+  message: "/images/svgs/icon-dd-message-box.svg",
+  application: "/images/svgs/icon-dd-application.svg",
+} as const;
 
-import ddIcon1 from 'src/assets/images/svgs/icon-dd-chat.svg'
-import ddIcon2 from 'src/assets/images/svgs/icon-dd-cart.svg'
-import ddIcon3 from 'src/assets/images/svgs/icon-dd-invoice.svg'
-import ddIcon4 from 'src/assets/images/svgs/icon-dd-date.svg'
-import ddIcon5 from 'src/assets/images/svgs/icon-dd-mobile.svg'
-import ddIcon6 from 'src/assets/images/svgs/icon-dd-lifebuoy.svg'
-import ddIcon7 from 'src/assets/images/svgs/icon-dd-message-box.svg'
-import ddIcon8 from 'src/assets/images/svgs/icon-dd-application.svg'
-
-//
-// Notifications dropdown
-//
 const notifications = [
   {
-    avatar: img1,
-    title: 'Roman Joined the Team!',
-    subtitle: 'Congratulate him',
+    avatar: avatarPaths.user1,
+    title: "Roman Joined the Team!",
+    subtitle: "Congratulate him",
   },
   {
-    avatar: img2,
-    title: 'New message received',
-    subtitle: 'Salma sent you new message',
+    avatar: avatarPaths.user2,
+    title: "New message received",
+    subtitle: "Salma sent you new message",
   },
   {
-    avatar: img3,
-    title: 'New Payment received',
-    subtitle: 'Check your earnings',
+    avatar: avatarPaths.user3,
+    title: "New Payment received",
+    subtitle: "Check your earnings",
   },
   {
-    avatar: img4,
-    title: 'Jolly completed tasks',
-    subtitle: 'Assign her new tasks',
+    avatar: avatarPaths.user4,
+    title: "Jolly completed tasks",
+    subtitle: "Assign her new tasks",
   },
   {
-    avatar: img1,
-    title: 'Roman Joined the Team!',
-    subtitle: 'Congratulate him',
+    avatar: avatarPaths.user1,
+    title: "Roman Joined the Team!",
+    subtitle: "Congratulate him",
   },
   {
-    avatar: img2,
-    title: 'New message received',
-    subtitle: 'Salma sent you new message',
+    avatar: avatarPaths.user2,
+    title: "New message received",
+    subtitle: "Salma sent you new message",
   },
   {
-    avatar: img3,
-    title: 'New Payment received',
-    subtitle: 'Check your earnings',
+    avatar: avatarPaths.user3,
+    title: "New Payment received",
+    subtitle: "Check your earnings",
   },
   {
-    avatar: img4,
-    title: 'Jolly completed tasks',
-    subtitle: 'Assign her new tasks',
+    avatar: avatarPaths.user4,
+    title: "Jolly completed tasks",
+    subtitle: "Assign her new tasks",
   },
 ];
 
-//
-// Profile dropdown
-//
 const profile = [
   {
-    href: '/user-profile',
-    title: 'My Profile',
-    subtitle: 'Account Settings',
-    icon: icon1,
+    href: "/user-profile",
+    title: "My Profile",
+    subtitle: "Account Settings",
+    icon: iconPaths.account,
   },
   {
-    href: '/apps/email',
-    title: 'My Inbox',
-    subtitle: 'Messages & Emails',
-    icon: icon2,
+    href: "/apps/email",
+    title: "My Inbox",
+    subtitle: "Messages & Emails",
+    icon: iconPaths.inbox,
   },
   {
-    href: '/apps/notes',
-    title: 'My Tasks',
-    subtitle: 'To-do and Daily Tasks',
-    icon: icon3,
+    href: "/apps/notes",
+    title: "My Tasks",
+    subtitle: "To-do and Daily Tasks",
+    icon: iconPaths.tasks,
   },
 ];
-
-// apps dropdown
 
 const appsLink = [
   {
-    href: '/apps/chats',
-    title: 'Chat Application',
-    subtext: 'Messages & Emails',
-    avatar: ddIcon1
+    href: "/apps/chats",
+    title: "Chat Application",
+    subtext: "Messages & Emails",
+    avatar: dropdownIcons.chat,
   },
   {
-    href: '/apps/ecommerce/shop',
-    title: 'eCommerce App',
-    subtext: 'Messages & Emails',
-    avatar: ddIcon2
+    href: "/apps/ecommerce/shop",
+    title: "eCommerce App",
+    subtext: "Messages & Emails",
+    avatar: dropdownIcons.cart,
   },
   {
-    href: '/',
-    title: 'Invoice App',
-    subtext: 'Messages & Emails',
-    avatar: ddIcon3
+    href: "/",
+    title: "Invoice App",
+    subtext: "Messages & Emails",
+    avatar: dropdownIcons.invoice,
   },
   {
-    href: '/apps/calendar',
-    title: 'Calendar App',
-    subtext: 'Messages & Emails',
-    avatar: ddIcon4
+    href: "/apps/calendar",
+    title: "Calendar App",
+    subtext: "Messages & Emails",
+    avatar: dropdownIcons.date,
   },
   {
-    href: '/apps/contacts',
-    title: 'Contact Application',
-    subtext: 'Account settings',
-    avatar: ddIcon5
+    href: "/apps/contacts",
+    title: "Contact Application",
+    subtext: "Account settings",
+    avatar: dropdownIcons.mobile,
   },
   {
-    href: '/apps/tickets',
-    title: 'Tickets App',
-    subtext: 'Account settings',
-    avatar: ddIcon6
+    href: "/apps/tickets",
+    title: "Tickets App",
+    subtext: "Account settings",
+    avatar: dropdownIcons.lifebuoy,
   },
   {
-    href: '/apps/email',
-    title: 'Email App',
-    subtext: 'To-do and Daily tasks',
-    avatar: ddIcon7
+    href: "/apps/email",
+    title: "Email App",
+    subtext: "To-do and Daily tasks",
+    avatar: dropdownIcons.message,
   },
   {
-    href: '/',
-    title: 'Kanban Application',
-    subtext: 'To-do and Daily tasks',
-    avatar: ddIcon8
+    href: "/",
+    title: "Kanban Application",
+    subtext: "To-do and Daily tasks",
+    avatar: dropdownIcons.application,
   },
-]
+];
 
 const pageLinks = [
   {
-    href: '/pricing',
-    title: 'Pricing Page'
+    href: "/pricing",
+    title: "Pricing Page",
   },
   {
-    href: '/auth/login',
-    title: 'Authentication Design'
+    href: "/auth/login",
+    title: "Authentication Design",
   },
   {
-    href: '/auth/register',
-    title: 'Register Now'
+    href: "/auth/register",
+    title: "Register Now",
   },
   {
-    href: '/404',
-    title: '404 Error Page'
+    href: "/404",
+    title: "404 Error Page",
   },
   {
-    href: '/apps/notes',
-    title: 'Notes App'
+    href: "/apps/notes",
+    title: "Notes App",
   },
   {
-    href: '/user-profile',
-    title: 'User Application'
+    href: "/user-profile",
+    title: "User Application",
   },
   {
-    href: '/apps/blog/posts',
-    title: 'Blog Design'
+    href: "/apps/blog/posts",
+    title: "Blog Design",
   },
   {
-    href: '/apps/ecommerce/eco-checkout',
-    title: 'Shopping Cart'
+    href: "/apps/ecommerce/eco-checkout",
+    title: "Shopping Cart",
   },
-]
+];
 
 export { notifications, profile, pageLinks, appsLink };
+

@@ -13,7 +13,7 @@ import AppLogo from "@/app/(DashboardLayout)/layout/shared/logo/Logo";
 const renderMenuItems = (items: NavigationItem[], activePath: string) =>
   items.map((item) => {
     const Icon = item.icon ?? IconPoint;
-    const itemIcon = <Icon stroke={1.5} size="1.3rem" />;
+    const itemIcon = <Icon stroke={1.5} size={20} />;
 
     //If the item has children (submenu)
     if (item.items && item.items.length > 0) {

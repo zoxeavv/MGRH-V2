@@ -4,27 +4,21 @@ import React, { useActionState } from "react";
 import { Box, Typography, Button, Stack, Alert } from "@mui/material";
 import CustomTextField from "@/app/(DashboardLayout)/components/forms/theme-elements/CustomTextField";
 import {
-  registerAction,
+  resetPasswordAction,
   type AuthActionState,
 } from "@/app/authentication/actions";
 
-type RegisterProps = {
+type ResetProps = {
   title?: string;
   subtitle?: React.ReactNode;
   subtext?: React.ReactNode;
-  redirectTo?: string;
 };
 
 const INITIAL_STATE: AuthActionState = { status: "idle" };
 
-const AuthRegister = ({
-  title,
-  subtitle,
-  subtext,
-  redirectTo,
-}: RegisterProps) => {
+const AuthReset = ({ title, subtitle, subtext }: ResetProps) => {
   const [state, formAction, pending] = useActionState(
-    registerAction,
+    resetPasswordAction,
     INITIAL_STATE
   );
 
@@ -44,35 +38,20 @@ const AuthRegister = ({
         </Alert>
       ) : null}
 
-      <Box component="form" action={formAction} noValidate>
-        <input type="hidden" name="redirectTo" value={redirectTo ?? ""} />
-        <Stack mb={3}>
-          <Typography
-            variant="subtitle1"
-            fontWeight={600}
-            component="label"
-            htmlFor="name"
-            mb="5px"
-          >
-            Name
-          </Typography>
-          <CustomTextField
-            id="name"
-            name="name"
-            variant="outlined"
-            fullWidth
-            required
-            autoComplete="name"
-            disabled={pending}
-          />
+      {state.status === "success" ? (
+        <Alert severity="success" sx={{ mb: 2 }}>
+          {state.message}
+        </Alert>
+      ) : null}
 
+      <Box component="form" action={formAction} noValidate>
+        <Stack mb={3}>
           <Typography
             variant="subtitle1"
             fontWeight={600}
             component="label"
             htmlFor="email"
             mb="5px"
-            mt="25px"
           >
             Email Address
           </Typography>
@@ -86,27 +65,6 @@ const AuthRegister = ({
             autoComplete="email"
             disabled={pending}
           />
-
-          <Typography
-            variant="subtitle1"
-            fontWeight={600}
-            component="label"
-            htmlFor="password"
-            mb="5px"
-            mt="25px"
-          >
-            Password
-          </Typography>
-          <CustomTextField
-            id="password"
-            name="password"
-            type="password"
-            variant="outlined"
-            fullWidth
-            required
-            autoComplete="new-password"
-            disabled={pending}
-          />
         </Stack>
         <Button
           color="primary"
@@ -116,7 +74,7 @@ const AuthRegister = ({
           type="submit"
           disabled={pending}
         >
-          {pending ? "Creating account..." : "Sign Up"}
+          {pending ? "Sending reset link..." : "Send Reset Link"}
         </Button>
       </Box>
       {subtitle}
@@ -124,4 +82,4 @@ const AuthRegister = ({
   );
 };
 
-export default AuthRegister;
+export default AuthReset;
