@@ -1,23 +1,27 @@
-"use client";
-import { baselightTheme } from "@/utils/theme/DefaultColors";
-import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import './global.css'
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./global.css";
+import { Providers } from "@/components/providers";
+import { getOrganizationContext } from "@/lib/auth/session";
 
+const inter = Inter({ subsets: ["latin"] });
 
-export default function RootLayout({
+export const metadata: Metadata = {
+  title: "CardStacks CRM",
+  description: "Professional CRM platform for client management",
+};
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const organization = await getOrganizationContext();
+
   return (
-    <html lang="en">
-      <body>
-        <ThemeProvider theme={baselightTheme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          {children}
-        </ThemeProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
+        <Providers organization={organization}>{children}</Providers>
       </body>
     </html>
   );
