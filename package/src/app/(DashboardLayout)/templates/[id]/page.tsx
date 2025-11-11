@@ -35,8 +35,8 @@ export default async function EditTemplatePage({
       templateId={template.id}
       initialData={{
         name: template.name,
-        description: template.description || undefined,
-        content: template.content || undefined,
+        description: template.description ?? undefined,
+        content: template.content ?? undefined,
       }}
     />
   );

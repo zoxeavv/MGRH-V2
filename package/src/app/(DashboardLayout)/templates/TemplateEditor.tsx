@@ -35,12 +35,12 @@ type TemplateFormData = z.infer<typeof templateFormSchema>;
 interface TemplateEditorProps {
   organizationId: string;
   userId: string;
-  templateId?: string;
+  templateId?: string | undefined;
   initialData?: {
     name: string;
-    description?: string | null;
-    content?: string | null;
-  };
+    description?: string | null | undefined;
+    content?: string | null | undefined;
+  } | undefined;
 }
 
 export function TemplateEditor({

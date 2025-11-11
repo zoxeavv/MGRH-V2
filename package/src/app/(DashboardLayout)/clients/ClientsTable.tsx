@@ -108,10 +108,12 @@ export function ClientsTable({ initialClients, organizationId }: ClientsTablePro
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>All Clients</CardTitle>
-            <Button onClick={() => setIsCreateDialogOpen(true)}>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Client
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => setIsCreateDialogOpen(true)}>
+                <Plus className="mr-2 h-4 w-4" />
+                Add Client
+              </Button>
+            </div>
           </div>
           <div className="flex items-center gap-2 pt-4">
             <div className="relative flex-1">
