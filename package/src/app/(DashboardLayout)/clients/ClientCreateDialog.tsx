@@ -57,14 +57,23 @@ export function ClientCreateDialog({
   const onSubmit = async (data: ClientFormData) => {
     setIsSubmitting(true);
     try {
-      const client = await createClient({
+      const input: {
+        organizationId: string;
+        name: string;
+        email?: string;
+        phone?: string;
+        company?: string;
+        status: 'active' | 'inactive' | 'archived';
+      } = {
         organizationId,
         name: data.name,
-        email: data.email || undefined,
-        phone: data.phone || undefined,
-        company: data.company || undefined,
         status: data.status,
-      });
+      };
+      if (data.email) input.email = data.email;
+      if (data.phone) input.phone = data.phone;
+      if (data.company) input.company = data.company;
+      
+      const client = await createClient(input);
       toast({
         title: 'Client created',
         description: `${client.name} has been added to your clients.`,

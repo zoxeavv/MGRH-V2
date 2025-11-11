@@ -26,5 +26,18 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "src/app/(DashboardLayout)/components/dashboard/**",
+    "src/app/(DashboardLayout)/components/forms/**",
+    "src/app/(DashboardLayout)/components/shared/**",
+    "src/app/(DashboardLayout)/icons/**",
+    "src/app/(DashboardLayout)/layout/sidebar/SidebarItems.tsx",
+    "src/app/(DashboardLayout)/layout/sidebar/Updrade.tsx",
+    "src/app/(DashboardLayout)/layout/header/data.tsx",
+    "src/app/(DashboardLayout)/sample-page/**",
+    "src/app/(DashboardLayout)/utilities/**",
+    "src/app/authentication/auth/**",
+    "src/utils/**"
+  ]
 }

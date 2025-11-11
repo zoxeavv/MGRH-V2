@@ -8,6 +8,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  flexRender,
   type ColumnDef,
   type SortingState,
 } from '@tanstack/react-table';
@@ -142,10 +143,10 @@ export function ClientsTable({ initialClients, organizationId }: ClientsTablePro
                                 onClick={header.column.getToggleSortingHandler()}
                                 className="flex items-center gap-2 hover:text-foreground"
                               >
-                                {header.renderHeader()}
+                                {flexRender(header.column.columnDef.header, header.getContext())}
                               </button>
                             ) : (
-                              header.renderHeader()
+                              flexRender(header.column.columnDef.header, header.getContext())
                             )}
                       </th>
                     ))}
@@ -161,7 +162,7 @@ export function ClientsTable({ initialClients, organizationId }: ClientsTablePro
                     >
                       {row.getVisibleCells().map((cell) => (
                         <td key={cell.id} className="p-4 align-middle">
-                          {cell.renderCell()}
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </td>
                       ))}
                     </tr>

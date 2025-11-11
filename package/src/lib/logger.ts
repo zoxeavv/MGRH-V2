@@ -2,19 +2,22 @@ import pino from 'pino';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-export const logger = pino({
+const loggerOptions: pino.LoggerOptions = {
   level: process.env.LOG_LEVEL || (isDevelopment ? 'debug' : 'info'),
-  transport: isDevelopment
-    ? {
-        target: 'pino-pretty',
-        options: {
-          colorize: true,
-          translateTime: 'HH:MM:ss Z',
-          ignore: 'pid,hostname',
-        },
-      }
-    : undefined,
-});
+};
+
+if (isDevelopment) {
+  loggerOptions.transport = {
+    target: 'pino-pretty',
+    options: {
+      colorize: true,
+      translateTime: 'HH:MM:ss Z',
+      ignore: 'pid,hostname',
+    },
+  };
+}
+
+export const logger = pino(loggerOptions);
 
 export function withServerActionLogging<T extends unknown[], R>(
   actionName: string,
