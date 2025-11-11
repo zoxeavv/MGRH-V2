@@ -1,89 +1,51 @@
-import React from "react";
-import Menuitems from "./MenuItems";
-import { Box, Typography } from "@mui/material";
-import {
-  Logo,
-  Sidebar as MUI_Sidebar,
-  Menu,
-  MenuItem,
-  Submenu,
-} from "react-mui-sidebar";
-import { IconPoint } from '@tabler/icons-react';
+"use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Upgrade } from "./Updrade";
+import { cn } from "@/lib/utils/cn";
+import menuGroups, { type NavigationItem } from "./MenuItems";
+import { IconPoint } from "@tabler/icons-react";
+import Logo from "../shared/logo/Logo";
 
+export function SidebarItems() {
+  const pathname = usePathname();
 
-const renderMenuItems = (items: any, pathDirect: any) => {
-
-  return items.map((item: any) => {
-
-    const Icon = item.icon ? item.icon : IconPoint;
-
-    const itemIcon = <Icon stroke={1.5} size="1.3rem" />;
-
-    if (item.subheader) {
-      // Display Subheader
-      return (
-        <Menu
-          subHeading={item.subheader}
-          key={item.subheader}
-        />
-      );
-    }
-
-    //If the item has children (submenu)
-    if (item.children) {
-      return (
-        <Submenu
-          key={item.id}
-          title={item.title}
-          icon={itemIcon}
-          borderRadius='7px'
-        >
-          {renderMenuItems(item.children, pathDirect)}
-        </Submenu>
-      );
-    }
-
-    // If the item has no children, render a MenuItem
+  const renderMenuItem = (item: NavigationItem) => {
+    const Icon = item.icon ?? IconPoint;
+    const isActive = pathname === item.href;
 
     return (
-      <Box px={3} key={item.id}>
-        <MenuItem
-          key={item.id}
-          isSelected={pathDirect === item?.href}
-          borderRadius='8px'
-          icon={itemIcon}
-          link={item.href}
-          component={Link}
-        >
-          {item.title}
-        </MenuItem >
-      </Box>
-
+      <Link
+        key={item.id}
+        href={item.href}
+        className={cn(
+          "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+          isActive
+            ? "bg-primary text-primary-foreground"
+            : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+        )}
+      >
+        <Icon size={20} stroke={1.5} />
+        {item.title}
+      </Link>
     );
-  });
-};
-
-
-const SidebarItems = () => {
-  const pathname = usePathname();
-  const pathDirect = pathname;
+  };
 
   return (
-    < >
-      <MUI_Sidebar width={"100%"} showProfile={false} themeColor={"#5D87FF"} themeSecondaryColor={'#49beff'} >
-
-        <Logo img='/images/logos/dark-logo.svg' component={Link} to="/" >Modernize</Logo>
-
-        {renderMenuItems(Menuitems, pathDirect)}
-        <Box px={2}>
-          <Upgrade />
-        </Box>
-      </MUI_Sidebar>
-
-    </>
+    <div className="flex h-full flex-col">
+      <div className="flex h-16 items-center border-b px-6">
+        <Logo />
+      </div>
+      <nav className="flex-1 space-y-1 overflow-y-auto p-4">
+        {menuGroups.map((group) => (
+          <div key={group.id} className="space-y-1">
+            <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {group.title}
+            </div>
+            {group.items.map(renderMenuItem)}
+          </div>
+        ))}
+      </nav>
+    </div>
   );
-};
-export default SidebarItems;
+}

@@ -1,117 +1,59 @@
-import { useMediaQuery, Box, Drawer } from "@mui/material";
-import SidebarItems from "./SidebarItems";
+"use client";
 
+import { useState } from "react";
+import { SidebarItems } from "./SidebarItems";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Menu } from "lucide-react";
 
-
-interface ItemType {
-  isMobileSidebarOpen: boolean;
-  onSidebarClose: (event: React.MouseEvent<HTMLElement>) => void;
+interface SidebarProps {
   isSidebarOpen: boolean;
+  isMobileSidebarOpen: boolean;
+  onSidebarClose: () => void;
 }
 
-const MSidebar = ({
+export function Sidebar({
+  isSidebarOpen,
   isMobileSidebarOpen,
   onSidebarClose,
-  isSidebarOpen,
-}: ItemType) => {
-  const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up("lg"));
-
-  const sidebarWidth = "270px";
-
-  // Custom CSS for short scrollbar
-  const scrollbarStyles = {
-    '&::-webkit-scrollbar': {
-      width: '7px',
-
-    },
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: '#eff2f7',
-      borderRadius: '15px',
-    },
-  };
-
-
-  if (lgUp) {
-    return (
-      <Box
-        sx={{
-          width: sidebarWidth,
-          flexShrink: 0,
-        }}
-      >
-        {/* ------------------------------------------- */}
-        {/* Sidebar for desktop */}
-        {/* ------------------------------------------- */}
-        <Drawer
-          anchor="left"
-          open={isSidebarOpen}
-          variant="permanent"
-          slotProps={{
-            paper: {
-              sx: {
-                boxSizing: "border-box",
-                ...scrollbarStyles,
-                width: sidebarWidth,
-              },
-            }
-          }}
-        >
-          {/* ------------------------------------------- */}
-          {/* Sidebar Box */}
-          {/* ------------------------------------------- */}
-          <Box
-            sx={{
-              height: "100%",
-            }}
-          >
-
-            <Box>
-              {/* ------------------------------------------- */}
-              {/* Sidebar Items */}
-              {/* ------------------------------------------- */}
-              <SidebarItems />
-            </Box>
-          </Box>
-        </Drawer>
-      </Box >
-    );
-  }
-
+}: SidebarProps) {
   return (
-    <Drawer
-      anchor="left"
-      open={isMobileSidebarOpen}
-      onClose={onSidebarClose}
-      variant="temporary"
-
-      slotProps={{
-        paper: {
-          sx: {
-            boxShadow: (theme) => theme.shadows[8],
-            ...scrollbarStyles,
-          },
-        }
-      }}
-    >
-      {/* ------------------------------------------- */}
-      {/* Sidebar Box */}
-      {/* ------------------------------------------- */}
-      <Box>
-        {/* ------------------------------------------- */}
-        {/* Sidebar Items */}
-        {/* ------------------------------------------- */}
+    <>
+      {/* Desktop Sidebar */}
+      <aside
+        className={`
+          fixed left-0 top-0 z-40 h-screen w-64 border-r bg-background transition-transform
+          ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
+          lg:translate-x-0
+        `}
+      >
         <SidebarItems />
-      </Box>
-      {/* ------------------------------------------- */}
-      {/* Sidebar For Mobile */}
-      {/* ------------------------------------------- */}
-    </Drawer>
+      </aside>
+
+      {/* Mobile Sidebar */}
+      <Sheet open={isMobileSidebarOpen} onOpenChange={onSidebarClose}>
+        <SheetContent side="left" className="w-64 p-0">
+          <SidebarItems />
+        </SheetContent>
+      </Sheet>
+    </>
   );
-};
+}
 
-export default MSidebar;
-
-
-
-
-
+export function SidebarToggle({
+  onToggle,
+}: {
+  onToggle: () => void;
+}) {
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      className="lg:hidden"
+      onClick={onToggle}
+    >
+      <Menu className="h-5 w-5" />
+      <span className="sr-only">Toggle sidebar</span>
+    </Button>
+  );
+}

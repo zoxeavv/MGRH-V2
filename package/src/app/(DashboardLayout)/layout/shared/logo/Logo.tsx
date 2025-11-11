@@ -1,21 +1,34 @@
+"use client";
+
 import Link from "next/link";
-import { styled } from "@mui/material";
 import Image from "next/image";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
-const LinkStyled = styled(Link)(() => ({
-  height: "70px",
-  width: "180px",
-  overflow: "hidden",
-  display: "block",
-}));
+export default function Logo() {
+  const { theme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-const Logo = () => {
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const logoSrc =
+    mounted && (resolvedTheme === "dark" || theme === "dark")
+      ? "/images/logos/dark-logo.svg"
+      : "/images/logos/dark-logo.svg";
+
   return (
-    <LinkStyled href="/">
-      <Image src="/images/logos/dark-logo.svg" alt="logo" height={70} width={174} priority />
-    </LinkStyled>
+    <Link href="/" className="flex items-center">
+      <Image
+        src={logoSrc}
+        alt="CardStacks CRM"
+        height={40}
+        width={160}
+        priority
+        className="h-10 w-auto"
+      />
+    </Link>
   );
-};
-
-export default Logo;
+}
   
