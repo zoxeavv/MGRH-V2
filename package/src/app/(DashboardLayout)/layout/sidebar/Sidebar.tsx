@@ -1,18 +1,23 @@
+'use client';
+
 import { useMediaQuery, Box, Drawer } from "@mui/material";
 import SidebarItems from "./SidebarItems";
+import type { NavigationGroup } from "./MenuItems";
 
 
 
 interface ItemType {
   isMobileSidebarOpen: boolean;
-  onSidebarClose: (event: React.MouseEvent<HTMLElement>) => void;
+  onSidebarClose: () => void;
   isSidebarOpen: boolean;
+  navGroups: NavigationGroup[];
 }
 
 const MSidebar = ({
   isMobileSidebarOpen,
   onSidebarClose,
   isSidebarOpen,
+  navGroups,
 }: ItemType) => {
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up("lg"));
 
@@ -53,7 +58,7 @@ const MSidebar = ({
                 ...scrollbarStyles,
                 width: sidebarWidth,
               },
-            }
+            },
           }}
         >
           {/* ------------------------------------------- */}
@@ -64,16 +69,15 @@ const MSidebar = ({
               height: "100%",
             }}
           >
-
             <Box>
               {/* ------------------------------------------- */}
               {/* Sidebar Items */}
               {/* ------------------------------------------- */}
-              <SidebarItems />
+              <SidebarItems groups={navGroups} />
             </Box>
           </Box>
         </Drawer>
-      </Box >
+      </Box>
     );
   }
 
@@ -81,16 +85,15 @@ const MSidebar = ({
     <Drawer
       anchor="left"
       open={isMobileSidebarOpen}
-      onClose={onSidebarClose}
+      onClose={() => onSidebarClose()}
       variant="temporary"
-
       slotProps={{
         paper: {
           sx: {
             boxShadow: (theme) => theme.shadows[8],
             ...scrollbarStyles,
           },
-        }
+        },
       }}
     >
       {/* ------------------------------------------- */}
@@ -100,7 +103,7 @@ const MSidebar = ({
         {/* ------------------------------------------- */}
         {/* Sidebar Items */}
         {/* ------------------------------------------- */}
-        <SidebarItems />
+        <SidebarItems groups={navGroups} />
       </Box>
       {/* ------------------------------------------- */}
       {/* Sidebar For Mobile */}

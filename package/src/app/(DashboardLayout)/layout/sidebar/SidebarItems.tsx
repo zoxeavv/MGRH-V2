@@ -1,47 +1,30 @@
-import React from "react";
-import Menuitems from "./MenuItems";
-import { Box, Typography } from "@mui/material";
-import {
-  Logo,
-  Sidebar as MUI_Sidebar,
-  Menu,
-  MenuItem,
-  Submenu,
-} from "react-mui-sidebar";
-import { IconPoint } from '@tabler/icons-react';
+'use client';
+
+import React, { Fragment } from "react";
+import { Box } from "@mui/material";
+import { Sidebar as MUI_Sidebar, Menu, MenuItem, Submenu } from "react-mui-sidebar";
+import { IconPoint } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Upgrade } from "./Updrade";
+import type { NavigationGroup, NavigationItem } from "./MenuItems";
+import AppLogo from "@/app/(DashboardLayout)/layout/shared/logo/Logo";
 
-
-const renderMenuItems = (items: any, pathDirect: any) => {
-
-  return items.map((item: any) => {
-
-    const Icon = item.icon ? item.icon : IconPoint;
-
+const renderMenuItems = (items: NavigationItem[], activePath: string) =>
+  items.map((item) => {
+    const Icon = item.icon ?? IconPoint;
     const itemIcon = <Icon stroke={1.5} size="1.3rem" />;
 
-    if (item.subheader) {
-      // Display Subheader
-      return (
-        <Menu
-          subHeading={item.subheader}
-          key={item.subheader}
-        />
-      );
-    }
-
     //If the item has children (submenu)
-    if (item.children) {
+    if (item.items && item.items.length > 0) {
       return (
         <Submenu
           key={item.id}
           title={item.title}
           icon={itemIcon}
-          borderRadius='7px'
+          borderRadius="7px"
         >
-          {renderMenuItems(item.children, pathDirect)}
+          {renderMenuItems(item.items, activePath)}
         </Submenu>
       );
     }
@@ -52,8 +35,8 @@ const renderMenuItems = (items: any, pathDirect: any) => {
       <Box px={3} key={item.id}>
         <MenuItem
           key={item.id}
-          isSelected={pathDirect === item?.href}
-          borderRadius='8px'
+          isSelected={activePath === item.href}
+          borderRadius="8px"
           icon={itemIcon}
           link={item.href}
           component={Link}
@@ -64,25 +47,31 @@ const renderMenuItems = (items: any, pathDirect: any) => {
 
     );
   });
+
+type SidebarItemsProps = {
+  groups: NavigationGroup[];
 };
 
-
-const SidebarItems = () => {
+const SidebarItems = ({ groups }: SidebarItemsProps) => {
   const pathname = usePathname();
   const pathDirect = pathname;
 
   return (
-    < >
+    <>
       <MUI_Sidebar width={"100%"} showProfile={false} themeColor={"#5D87FF"} themeSecondaryColor={'#49beff'} >
-
-        <Logo img='/images/logos/dark-logo.svg' component={Link} to="/" >Modernize</Logo>
-
-        {renderMenuItems(Menuitems, pathDirect)}
+        <Box px={3} py={4}>
+          <AppLogo />
+        </Box>
+        {groups.map((group) => (
+          <Fragment key={group.id}>
+            <Menu subHeading={group.title} />
+            {renderMenuItems(group.items, pathDirect)}
+          </Fragment>
+        ))}
         <Box px={2}>
           <Upgrade />
         </Box>
       </MUI_Sidebar>
-
     </>
   );
 };

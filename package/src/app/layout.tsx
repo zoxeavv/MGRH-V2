@@ -1,9 +1,11 @@
-"use client";
-import { baselightTheme } from "@/utils/theme/DefaultColors";
-import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import './global.css'
+import type { Metadata } from "next";
+import Providers from "@/components/layout/providers";
+import "./global.css";
 
+export const metadata = {
+  title: "CardStacks CRM",
+  description: "Multi-tenant CRM SaaS built on the Vercel Admin template.",
+} satisfies Metadata;
 
 export default function RootLayout({
   children,
@@ -11,13 +13,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>
-        <ThemeProvider theme={baselightTheme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          {children}
-        </ThemeProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
