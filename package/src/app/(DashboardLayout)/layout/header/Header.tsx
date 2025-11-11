@@ -1,79 +1,32 @@
-import React from 'react';
-import { Box, AppBar, Toolbar, styled, Stack, IconButton, Badge, Button } from '@mui/material';
-import PropTypes from 'prop-types';
-import Link from 'next/link';
-// components
-import Profile from './Profile';
-import { IconBellRinging, IconMenu } from '@tabler/icons-react';
+'use client';
 
-interface ItemType {
-  toggleMobileSidebar:  (event: React.MouseEvent<HTMLElement>) => void;
+import { Menu, Bell } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Profile from './Profile';
+
+interface HeaderProps {
+  toggleMobileSidebar: () => void;
 }
 
-const Header = ({toggleMobileSidebar}: ItemType) => {
-
-  // const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
-  // const lgDown = useMediaQuery((theme) => theme.breakpoints.down('lg'));
-
-
-  const AppBarStyled = styled(AppBar)(({ theme }) => ({
-    boxShadow: 'none',
-    background: theme.palette.background.paper,
-    justifyContent: 'center',
-    backdropFilter: 'blur(4px)',
-    [theme.breakpoints.up('lg')]: {
-      minHeight: '70px',
-    },
-  }));
-  const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
-    width: '100%',
-    color: theme.palette.text.secondary,
-  }));
-
+export default function Header({ toggleMobileSidebar }: HeaderProps) {
   return (
-    <AppBarStyled position="sticky" color="default">
-      <ToolbarStyled>
-        <IconButton
-          color="inherit"
-          aria-label="menu"
-          onClick={toggleMobileSidebar}
-          sx={{
-            display: {
-              lg: "none",
-              xs: "inline",
-            },
-          }}
-        >
-          <IconMenu width="20" height="20" />
-        </IconButton>
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <Button
+        variant="ghost"
+        size="icon"
+        className="lg:hidden"
+        onClick={toggleMobileSidebar}
+        aria-label="Toggle sidebar"
+      >
+        <Menu className="h-5 w-5" />
+      </Button>
 
-
-        <IconButton
-          size="large"
-          aria-label="show 11 new notifications"
-          color="inherit"
-          aria-controls="msgs-menu"
-          aria-haspopup="true"
-        >
-          <Badge variant="dot" color="primary">
-            <IconBellRinging size="21" stroke="1.5" />
-          </Badge>
-
-        </IconButton>
-        <Box flexGrow={1} />
-        <Stack spacing={1} direction="row" alignItems="center">
-          <Button variant="contained" component={Link} href="/authentication/login"   disableElevation color="primary" >
-            Login
-          </Button>
-          <Profile />
-        </Stack>
-      </ToolbarStyled>
-    </AppBarStyled>
+      <div className="flex flex-1 items-center justify-end gap-4 px-4">
+        <Button variant="ghost" size="icon" aria-label="Notifications">
+          <Bell className="h-5 w-5" />
+        </Button>
+        <Profile />
+      </div>
+    </header>
   );
-};
-
-Header.propTypes = {
-  sx: PropTypes.object,
-};
-
-export default Header;
+}
