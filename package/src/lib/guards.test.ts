@@ -30,7 +30,7 @@ describe('guards', () => {
     });
 
     it('should throw when array is null', () => {
-      expect(() => firstOrError(null)).toThrow('Expected at least one row');
+      expect(() => firstOrError(null as unknown as undefined)).toThrow('Expected at least one row');
     });
   });
 
@@ -51,7 +51,7 @@ describe('guards', () => {
     });
 
     it('should return null when array is null', () => {
-      const result = firstOrNull(null);
+      const result = firstOrNull(null as unknown as undefined);
       expect(result).toBeNull();
     });
   });
@@ -68,7 +68,7 @@ describe('guards', () => {
     });
 
     it('should return empty array when null', () => {
-      const result = normalizeArray(null);
+      const result = normalizeArray(null as unknown as undefined);
       expect(result).toEqual([]);
     });
 

@@ -70,7 +70,7 @@ describe('offers actions', () => {
         quantity: 2,
         unitPrice: 10,
       });
-      expect(normalized[1].description).toBe('');
+      expect(normalized[1]?.description).toBe('');
     });
 
     it('should handle items with missing fields', () => {

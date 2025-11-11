@@ -56,7 +56,7 @@ export const templates = pgTable('templates', {
   organizationId: uuid('organization_id').notNull().references(() => organizations.id, { onDelete: 'cascade' }),
   name: text('name').notNull(),
   description: text('description'),
-  content: text('content').notNull(), // Markdown content
+  content: text('content'), // Markdown content - nullable
   sections: jsonb('sections').$type<Array<{ id: string; title: string; content: string; order: number }>>().default([]),
   isDefault: boolean('is_default').default(false),
   createdAt: timestamp('created_at').defaultNow().notNull(),
