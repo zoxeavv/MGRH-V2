@@ -1,5 +1,6 @@
+'use client';
+
 import React, { useState } from "react";
-import Link from "next/link";
 import {
   Avatar,
   Box,
@@ -12,6 +13,7 @@ import {
 } from "@mui/material";
 
 import { IconListCheck, IconMail, IconUser } from "@tabler/icons-react";
+import { logoutAction } from "@/app/authentication/actions";
 
 const Profile = () => {
   const [anchorEl2, setAnchorEl2] = useState(null);
@@ -81,17 +83,18 @@ const Profile = () => {
           </ListItemIcon>
           <ListItemText>My Tasks</ListItemText>
         </MenuItem>
-        <Box mt={1} py={1} px={2}>
-          <Button
-            href="/authentication/login"
-            variant="outlined"
-            color="primary"
-            component={Link}
-            fullWidth
-          >
-            Logout
-          </Button>
-        </Box>
+          <Box mt={1} py={1} px={2}>
+            <form action={logoutAction}>
+              <Button
+                variant="outlined"
+                color="primary"
+                fullWidth
+                type="submit"
+              >
+                Logout
+              </Button>
+            </form>
+          </Box>
       </Menu>
     </Box>
   );

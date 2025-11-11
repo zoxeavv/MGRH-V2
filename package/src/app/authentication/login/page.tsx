@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Grid, Box, Card, Stack, Typography } from "@mui/material";
+import { Grid, Box, Card, Stack, Typography, Alert } from "@mui/material";
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
 import Logo from "@/app/(DashboardLayout)/layout/shared/logo/Logo";
 import AuthLogin from "../auth/AuthLogin";
@@ -9,6 +9,7 @@ import AuthLogin from "../auth/AuthLogin";
 const Login2 = () => {
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") ?? "/";
+  const status = searchParams.get("status");
 
   return (
     <PageContainer title="Login" description="Sign in to CardStacks CRM">
@@ -51,6 +52,11 @@ const Login2 = () => {
               <Box display="flex" alignItems="center" justifyContent="center">
                 <Logo />
               </Box>
+                {status === "verify-email" ? (
+                  <Alert severity="success" sx={{ mt: 3, mb: 2 }}>
+                    Check your inbox to verify the new account before signing in.
+                  </Alert>
+                ) : null}
               <AuthLogin
                 redirectTo={redirectTo}
                 subtext={

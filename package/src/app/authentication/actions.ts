@@ -154,3 +154,9 @@ export async function resetPasswordAction(
     message: 'Check your email for password reset instructions.',
   };
 }
+
+export async function logoutAction() {
+  const supabase = createSupabaseServerClient();
+  await supabase.auth.signOut();
+  redirect('/authentication/login');
+}
