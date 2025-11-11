@@ -1,40 +1,24 @@
-#!/bin/bash
-# Script de correction - Copiez-collez ceci dans votre terminal
+# 🔧 CORRECTIONS RAPIDES - Copiez-collez ces commandes
 
-cd /Users/thier/Ehnsm/Modernize-Nextjs-Free/package
+## Commande unique pour tout corriger :
 
-echo "🔧 Correction de schema.ts..."
-cat > src/lib/db/schema.ts << 'SCHEMA_EOF'
-import { pgTable, uuid, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core';
+```bash
+cd /Users/thier/Ehnsm/Modernize-Nextjs-Free/package && \
+# Corriger schema.ts - Supprimer le doublon et renommer
+sed -i '' '26,33d' src/lib/db/schema.ts && \
+sed -i '' 's/export const users = pgTable/export const crmUsers = pgTable/g' src/lib/db/schema.ts && \
+sed -i '' "s/'users'/'crm_users'/g" src/lib/db/schema.ts && \
+sed -i '' 's/users_email_unique/crm_users_email_unique/g' src/lib/db/schema.ts && \
+# Corriger postcss.config.js
+echo 'module.exports = { plugins: { autoprefixer: {} } };' > postcss.config.js && \
+echo "✅ Fichiers corrigés ! Maintenant corrigez Header.tsx manuellement ou utilisez la commande suivante"
+```
 
-export const organizations = pgTable('organizations', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  name: text('name').notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-});
+## Pour Header.tsx, utilisez cette commande :
 
-// CRM Users table - separate from Supabase auth.users
-export const crmUsers = pgTable(
-  'crm_users',
-  {
-    id: uuid('id').primaryKey(),
-    email: text('email').notNull(),
-    fullName: text('full_name'),
-    avatarUrl: text('avatar_url'),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true })
-      .defaultNow()
-      .$onUpdate(() => new Date())
-      .notNull(),
-  },
-  (table) => ({
-    emailUnique: uniqueIndex('crm_users_email_unique').on(table.email),
-  }),
-);
-SCHEMA_EOF
-
-echo "🔧 Correction de Header.tsx..."
-cat > src/app/\(DashboardLayout\)/layout/header/Header.tsx << 'HEADER_EOF'
+```bash
+cd /Users/thier/Ehnsm/Modernize-Nextjs-Free/package && \
+cat > src/app/\(DashboardLayout\)/layout/header/Header.tsx << 'HEADEREOF'
 'use client';
 
 import React from 'react';
@@ -112,24 +96,14 @@ const Header = ({ toggleMobileSidebar }: ItemType) => {
 };
 
 export default Header;
-HEADER_EOF
+HEADEREOF
+echo "✅ Header.tsx corrigé !"
+```
 
-echo "🔧 Correction de postcss.config.js..."
-cat > postcss.config.js << 'POSTCSS_EOF'
-module.exports = {
-  plugins: {
-    autoprefixer: {},
-  },
-};
-POSTCSS_EOF
+## Ensuite, videz le cache et redémarrez :
 
-echo ""
-echo "✅ Toutes les corrections appliquées !"
-echo ""
-echo "📋 Vérification:"
-echo "   Schema exports: $(grep -c 'export const' src/lib/db/schema.ts)"
-echo "   Header utilise MUI: $(grep -q '@mui/material' src/app/\(DashboardLayout\)/layout/header/Header.tsx && echo 'OUI' || echo 'NON')"
-echo "   PostCSS sans Tailwind: $(grep -q 'tailwindcss' postcss.config.js && echo 'NON' || echo 'OUI')"
-echo ""
-echo "🚀 Maintenant exécutez:"
-echo "   rm -rf .next && npm run dev"
+```bash
+cd /Users/thier/Ehnsm/Modernize-Nextjs-Free/package && \
+rm -rf .next && \
+npm run dev
+```
