@@ -6,6 +6,7 @@ import {
   Card,
   CardContent,
   Chip,
+  Checkbox,
   Stack,
   Typography,
   Table,
@@ -22,6 +23,9 @@ import type { ClientListItem } from '@/lib/db/queries/clients';
 type ClientsDataTableProps = {
   organization: OrganizationSummary;
   clients: ClientListItem[];
+  selectedClientIds: string[];
+  onToggleClient: (clientId: string) => void;
+  onToggleAll: () => void;
 };
 
 const statusColorMap: Record<string, 'default' | 'success' | 'warning' | 'error'> = {
@@ -34,7 +38,13 @@ const statusColorMap: Record<string, 'default' | 'success' | 'warning' | 'error'
 export default function ClientsDataTable({
   organization,
   clients,
+  selectedClientIds,
+  onToggleClient,
+  onToggleAll,
 }: ClientsDataTableProps) {
+  const allSelected = clients.length > 0 && selectedClientIds.length === clients.length;
+  const indeterminate = selectedClientIds.length > 0 && !allSelected;
+
   return (
     <Stack spacing={3}>
       <Box>
@@ -53,6 +63,14 @@ export default function ClientsDataTable({
             <Table>
               <TableHead>
                 <TableRow>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      indeterminate={indeterminate}
+                      checked={allSelected}
+                      onChange={onToggleAll}
+                      inputProps={{ 'aria-label': 'Select all clients' }}
+                    />
+                  </TableCell>
                   <TableCell>Name</TableCell>
                   <TableCell>Company</TableCell>
                   <TableCell>Email</TableCell>
@@ -66,6 +84,13 @@ export default function ClientsDataTable({
               <TableBody>
                 {clients.map((client) => (
                   <TableRow key={client.id} hover>
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={selectedClientIds.includes(client.id)}
+                        onChange={() => onToggleClient(client.id)}
+                        inputProps={{ 'aria-label': `Select ${client.name}` }}
+                      />
+                    </TableCell>
                     <TableCell>
                       <Stack spacing={0.5}>
                         <Typography fontWeight={600}>{client.name}</Typography>

@@ -11,6 +11,7 @@ export type ClientListItem = {
   phone: string | null;
   status: string;
   tags: string[];
+  ownerId: string | null;
   ownerName: string | null;
   createdAt: string;
   updatedAt: string;
@@ -30,6 +31,7 @@ export async function listClientsByOrganization(
       tags: clients.tags,
       createdAt: clients.createdAt,
       updatedAt: clients.updatedAt,
+      ownerId: clients.ownerId,
       ownerName: users.fullName,
     })
     .from(clients)
@@ -45,6 +47,7 @@ export async function listClientsByOrganization(
     phone: row.phone ?? null,
     status: row.status ?? 'prospect',
     tags: Array.isArray(row.tags) ? row.tags : [],
+    ownerId: row.ownerId ?? null,
     ownerName: row.ownerName ?? null,
     createdAt: row.createdAt?.toISOString() ?? '',
     updatedAt: row.updatedAt?.toISOString() ?? '',
