@@ -38,6 +38,10 @@
     "src/app/(DashboardLayout)/sample-page/**",
     "src/app/(DashboardLayout)/utilities/**",
     "src/app/authentication/auth/**",
-    "src/utils/**"
+    "src/utils/**",
+    "vitest.config.ts",
+    "vitest.setup.ts",
+    "jest.config.js",
+    "jest.setup.js"
   ]
 }
