@@ -1,34 +1,125 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# CardStacks CRM
+
+A professional, modular, multi-tenant CRM SaaS platform built on Next.js 15, TypeScript, and Tailwind CSS.
+
+## Features
+
+- 🏢 **Multi-tenant Architecture** - Organization-based isolation
+- 👥 **Client Management** - Comprehensive client profiles with notes, files, and tags
+- 📄 **Offer Management** - Create and track client offers
+- 📝 **Template System** - Reusable offer templates
+- 🔐 **Authentication** - Secure session management with Supabase
+- 🎨 **Modern UI** - Beautiful, accessible interface with dark mode support
+- 📊 **Analytics Ready** - Dashboard with KPIs and metrics
+- 🔒 **Type-Safe** - Full TypeScript with strict mode enabled
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript (strict mode)
+- **Styling**: Tailwind CSS
+- **Database**: PostgreSQL with Drizzle ORM
+- **Auth**: Supabase Auth
+- **UI Components**: Radix UI + Custom components
+- **Forms**: React Hook Form + Zod
+- **Logging**: Pino
+- **Monitoring**: Sentry
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+- Node.js 18+ 
+- pnpm (recommended) or npm
+- PostgreSQL database (Supabase recommended)
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   pnpm install
+   ```
+
+3. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Fill in your Supabase credentials and other environment variables.
+
+4. Set up the database:
+   ```bash
+   pnpm db:push
+   ```
+
+5. Run the development server:
+   ```bash
+   pnpm dev
+   ```
+
+6. Open [http://localhost:3000](http://localhost:3000)
+
+## Project Structure
+
+```
+src/
+├── app/                    # Next.js app router pages
+│   ├── (DashboardLayout)/  # Protected dashboard routes
+│   │   ├── clients/         # Client management module
+│   │   ├── offers/          # Offer management module
+│   │   ├── templates/       # Template management module
+│   │   └── settings/        # Settings page
+│   └── authentication/      # Auth pages
+├── components/              # React components
+│   ├── ui/                  # Reusable UI components
+│   └── providers/           # Context providers
+├── lib/                     # Utilities and configurations
+│   ├── auth/                # Authentication utilities
+│   ├── db/                  # Database schema and queries
+│   └── guards.ts            # Type-safe guards
+└── hooks/                   # Custom React hooks
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Type Checking
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+pnpm typecheck
+pnpm typecheck:ci  # CI mode
+```
 
-## Learn More
+### Database Migrations
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm db:generate  # Generate migrations
+pnpm db:push      # Push schema changes
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Building
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```bash
+pnpm build
+```
 
-## Deploy on Vercel
+## TypeScript Configuration
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project uses strict TypeScript settings:
+- `exactOptionalPropertyTypes: true`
+- `noUncheckedIndexedAccess: true`
+- `strict: true`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+All code must pass type checking with these settings enabled.
+
+## Contributing
+
+1. Follow the existing code style
+2. Ensure all TypeScript checks pass
+3. Write type-safe code (no `as any` casts)
+4. Use the provided guards for database operations
+5. Normalize all optional arrays/objects before use
+
+## License
+
+See LICENSE.md for details.

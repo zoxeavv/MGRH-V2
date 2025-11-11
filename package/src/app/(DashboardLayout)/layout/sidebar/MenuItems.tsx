@@ -1,78 +1,52 @@
 import {
-  IconAperture,
-  IconCopy,
-  IconLayoutDashboard,
-  IconLogin,
-  IconMoodHappy,
-  IconTypography,
-  IconUserPlus,
-} from "@tabler/icons-react";
+  LayoutDashboard,
+  Users,
+  FileText,
+  Receipt,
+  Settings,
+  type LucideIcon,
+} from 'lucide-react';
 
-import { uniqueId } from "lodash";
+export interface MenuItem {
+  id: string;
+  title: string;
+  icon: LucideIcon;
+  href: string;
+  navlabel?: boolean;
+  subheader?: string;
+}
 
-const Menuitems = [
+const Menuitems: MenuItem[] = [
   {
-    navlabel: true,
-    subheader: "HOME",
-  },
-
-  {
-    id: uniqueId(),
-    title: "Dashboard",
-    icon: IconLayoutDashboard,
-    href: "/",
+    id: 'dashboard',
+    title: 'Dashboard',
+    icon: LayoutDashboard,
+    href: '/',
   },
   {
-    navlabel: true,
-    subheader: "UTILITIES",
+    id: 'clients',
+    title: 'Clients',
+    icon: Users,
+    href: '/clients',
   },
   {
-    id: uniqueId(),
-    title: "Typography",
-    icon: IconTypography,
-    href: "/utilities/typography",
+    id: 'templates',
+    title: 'Templates',
+    icon: FileText,
+    href: '/templates',
   },
   {
-    id: uniqueId(),
-    title: "Shadow",
-    icon: IconCopy,
-    href: "/utilities/shadow",
+    id: 'offers',
+    title: 'Offers',
+    icon: Receipt,
+    href: '/offers',
   },
   {
-    navlabel: true,
-    subheader: "AUTH",
+    id: 'settings',
+    title: 'Settings',
+    icon: Settings,
+    href: '/settings',
   },
-  {
-    id: uniqueId(),
-    title: "Login",
-    icon: IconLogin,
-    href: "/authentication/login",
-  },
-  {
-    id: uniqueId(),
-    title: "Register",
-    icon: IconUserPlus,
-    href: "/authentication/register",
-  },
-  {
-    navlabel: true,
-    subheader: " EXTRA",
-  },
-  {
-    id: uniqueId(),
-    title: "Icons",
-    icon: IconMoodHappy,
-    href: "/icons",
-  },
-  {
-    id: uniqueId(),
-    title: "Sample Page",
-    icon: IconAperture,
-    href: "/sample-page",
-  },
-
 ];
 
 export default Menuitems;
-
-

@@ -1,94 +1,102 @@
-"use client";
-import { Grid, Box, Card, Typography, Stack } from "@mui/material";
-import Link from "next/link";
-import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
-import Logo from "@/app/(DashboardLayout)/layout/shared/logo/Logo";
-import AuthRegister from "../auth/AuthRegister";
+'use client';
 
-const Register2 = () => (
-  <PageContainer title="Register" description="this is Register page">
-    <Box
-      sx={{
-        position: "relative",
-        "&:before": {
-          content: '""',
-          background: "radial-gradient(#d2f1df, #d3d7fa, #bad8f4)",
-          backgroundSize: "400% 400%",
-          animation: "gradient 15s ease infinite",
-          position: "absolute",
-          height: "100%",
-          width: "100%",
-          opacity: "0.3",
-        },
-      }}
-    >
-      <Grid
-        container
-        spacing={0}
-        justifyContent="center"
-        sx={{ height: "100vh" }}
-      >
-        <Grid
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          size={{
-            xs: 12,
-            sm: 12,
-            lg: 4,
-            xl: 3
-          }}>
-          <Card
-            elevation={9}
-            sx={{ p: 4, zIndex: 1, width: "100%", maxWidth: "500px" }}
-          >
-            <Box display="flex" alignItems="center" justifyContent="center">
-              <Logo />
-            </Box>
-            <AuthRegister
-              subtext={
-                <Typography
-                  variant="subtitle1"
-                  textAlign="center"
-                  color="textSecondary"
-                  mb={1}
-                >
-                  Your Social Campaigns
-                </Typography>
-              }
-              subtitle={
-                <Stack
-                  direction="row"
-                  justifyContent="center"
-                  spacing={1}
-                  mt={3}
-                >
-                  <Typography
-                    color="textSecondary"
-                    variant="h6"
-                    fontWeight="400"
-                  >
-                    Already have an Account?
-                  </Typography>
-                  <Typography
-                    component={Link}
-                    href="/authentication/login"
-                    fontWeight="500"
-                    sx={{
-                      textDecoration: "none",
-                      color: "primary.main",
-                    }}
-                  >
-                    Sign In
-                  </Typography>
-                </Stack>
-              }
-            />
-          </Card>
-        </Grid>
-      </Grid>
-    </Box>
-  </PageContainer>
-);
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import Link from 'next/link';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import Logo from '@/app/(DashboardLayout)/layout/shared/logo/Logo';
 
-export default Register2;
+const registerSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  organizationName: z.string().min(2, 'Organization name is required'),
+});
+
+type RegisterFormData = z.infer<typeof registerSchema>;
+
+export default function RegisterPage() {
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+  });
+
+  const onSubmit = async (data: RegisterFormData) => {
+    setIsSubmitting(true);
+    try {
+      // TODO: Implement actual registration
+      // For now, redirect to dashboard
+      router.push('/');
+    } catch (error) {
+      console.error('Registration error:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background to-muted p-4">
+      <Card className="w-full max-w-md rounded-2xl">
+        <CardHeader className="space-y-1 text-center">
+          <div className="flex justify-center">
+            <Logo />
+          </div>
+          <CardTitle className="text-2xl">Create an account</CardTitle>
+          <CardDescription>Get started with CardStacks CRM</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Full Name</Label>
+              <Input id="name" {...register('name')} />
+              {errors.name && (
+                <p className="text-sm text-destructive">{errors.name.message}</p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" placeholder="name@example.com" {...register('email')} />
+              {errors.email && (
+                <p className="text-sm text-destructive">{errors.email.message}</p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="organizationName">Organization Name</Label>
+              <Input id="organizationName" {...register('organizationName')} />
+              {errors.organizationName && (
+                <p className="text-sm text-destructive">{errors.organizationName.message}</p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input id="password" type="password" {...register('password')} />
+              {errors.password && (
+                <p className="text-sm text-destructive">{errors.password.message}</p>
+              )}
+            </div>
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? 'Creating account...' : 'Create account'}
+            </Button>
+            <div className="text-center text-sm">
+              Already have an account?{' '}
+              <Link href="/authentication/login" className="text-primary hover:underline">
+                Sign in
+              </Link>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

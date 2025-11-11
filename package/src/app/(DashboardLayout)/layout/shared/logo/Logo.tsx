@@ -1,21 +1,17 @@
-import Link from "next/link";
-import { styled } from "@mui/material";
-import Image from "next/image";
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
-const LinkStyled = styled(Link)(() => ({
-  height: "70px",
-  width: "180px",
-  overflow: "hidden",
-  display: "block",
-}));
+interface LogoProps {
+  className?: string;
+}
 
-const Logo = () => {
+export default function Logo({ className }: LogoProps) {
   return (
-    <LinkStyled href="/">
-      <Image src="/images/logos/dark-logo.svg" alt="logo" height={70} width={174} priority />
-    </LinkStyled>
+    <Link href="/" className={cn('flex items-center gap-2', className)}>
+      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+        <span className="text-lg font-bold">CS</span>
+      </div>
+      <span className="text-xl font-semibold">CardStacks</span>
+    </Link>
   );
-};
-
-export default Logo;
-  
+}
