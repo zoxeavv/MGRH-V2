@@ -1,35 +1,37 @@
-// Session management utilities
-// Handles user session and organization context
+import { createClient } from "@/lib/supabase/server";
+import { crmUsers, organizations } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
+import { getDb } from "@/lib/db";
 
-import { getDb } from '@/lib/db';
-import { crmUsers } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
-
-interface SessionUser {
+export type SessionUser = {
   id: string;
   email: string;
   fullName: string | null;
   avatarUrl: string | null;
-}
+};
 
-interface AuthUser {
+export type OrganizationContext = {
   id: string;
-  email?: string;
-}
+  name: string;
+  slug: string;
+  role: "owner" | "member" | "viewer";
+};
 
 /**
- * Get session user from database
- * Returns null if user not found or database error occurs
+ * Get the current session user
  */
-export async function getSessionUser(authUser: AuthUser | null): Promise<SessionUser | null> {
-  if (!authUser?.id) {
-    return null;
-  }
-
+export async function getSessionUser(): Promise<SessionUser | null> {
   try {
+    const supabase = await createClient();
+    const {
+      data: { user: authUser },
+    } = await supabase.auth.getUser();
+
+    if (!authUser) {
+      return null;
+    }
+
     const db = await getDb();
-    
-    // Check if db is valid
     if (!db) {
       console.warn('Database connection not available');
       return null;
@@ -41,33 +43,38 @@ export async function getSessionUser(authUser: AuthUser | null): Promise<Session
       .where(eq(crmUsers.id, authUser.id))
       .limit(1);
 
-    if (userRows.length === 0) {
+    if (!userRows[0]) {
       return null;
     }
 
-    const user = userRows[0];
     return {
-      id: user.id,
-      email: user.email,
-      fullName: user.fullName,
-      avatarUrl: user.avatarUrl,
+      id: userRows[0].id,
+      email: userRows[0].email,
+      fullName: userRows[0].fullName ?? null,
+      avatarUrl: userRows[0].avatarUrl ?? null,
     };
   } catch (error) {
-    console.error('Error getting session user:', error);
+    console.error("Error getting session user:", error);
     return null;
   }
 }
 
 /**
- * Get organization context for the current user
- * Returns null if user not found or database error occurs
+ * Get the current user's organization context
+ * TODO: Implement when organizationMembers table is created
  */
-export async function getOrganizationContext(authUser: AuthUser | null): Promise<{ user: SessionUser | null; organizationId: string | null }> {
-  const user = await getSessionUser(authUser);
-  
-  // TODO: Implement organization lookup when organizations table is ready
-  return {
-    user,
-    organizationId: null,
-  };
+export async function getOrganizationContext(): Promise<OrganizationContext | null> {
+  try {
+    const user = await getSessionUser();
+    if (!user) {
+      return null;
+    }
+
+    // TODO: Implement organization lookup when organizationMembers table is ready
+    // For now, return null
+    return null;
+  } catch (error) {
+    console.error("Error getting organization context:", error);
+    return null;
+  }
 }
