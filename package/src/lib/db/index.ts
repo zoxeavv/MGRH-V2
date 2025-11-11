@@ -50,8 +50,8 @@ export async function checkDatabaseConnection(): Promise<boolean> {
   }
 }
 
-// Helper function to check if users table exists
-export async function checkUsersTableExists(): Promise<boolean> {
+// Helper function to check if crm_users table exists
+export async function checkCrmUsersTableExists(): Promise<boolean> {
   try {
     const dbInstance = await getDb();
     if (!client) {
@@ -61,14 +61,19 @@ export async function checkUsersTableExists(): Promise<boolean> {
       SELECT EXISTS (
         SELECT FROM information_schema.tables 
         WHERE table_schema = 'public' 
-        AND table_name = 'users'
+        AND table_name = 'crm_users'
       );
     `;
     return result[0]?.exists ?? false;
   } catch (error) {
-    console.error('Error checking users table:', error);
+    console.error('Error checking crm_users table:', error);
     return false;
   }
+}
+
+// Legacy function name for backward compatibility (deprecated)
+export async function checkUsersTableExists(): Promise<boolean> {
+  return checkCrmUsersTableExists();
 }
 
 // Export schema for use in other files

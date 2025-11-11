@@ -16,7 +16,7 @@ async function main() {
   
   console.log('Database Status:');
   console.log(`  Connected: ${status.connected ? '✅' : '❌'}`);
-  console.log(`  Users table exists: ${status.usersTableExists ? '✅' : '❌'}`);
+  console.log(`  CRM Users table exists: ${status.crmUsersTableExists ? '✅' : '❌'}`);
   console.log(`  Ready: ${status.ready ? '✅' : '❌'}`);
   
   if (!status.connected) {
@@ -24,8 +24,8 @@ async function main() {
     process.exit(1);
   }
   
-  if (!status.usersTableExists) {
-    console.error('\n❌ Users table does not exist. Run: npm run db:push');
+  if (!status.crmUsersTableExists) {
+    console.error('\n❌ CRM Users table does not exist. Run: npm run db:push');
     process.exit(1);
   }
   

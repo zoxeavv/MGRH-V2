@@ -51,22 +51,24 @@ npx tsx scripts/check-db.ts
 
 ### Manual verification:
 1. Connect to your database
-2. Check if users table exists:
+2. Check if crm_users table exists:
 ```sql
 SELECT * FROM information_schema.tables 
 WHERE table_schema = 'public' 
-AND table_name = 'users';
+AND table_name = 'crm_users';
 ```
 
 3. Verify table structure:
 ```sql
-\d public.users
+\d public.crm_users
 ```
 
 ## Troubleshooting
 
-### Error: "relation 'users' does not exist"
+### Error: "relation 'crm_users' does not exist"
 **Solution:** Run migrations using `npm run db:push` or execute the SQL migration file manually.
+
+**Note:** The table was renamed from `users` to `crm_users` to avoid conflicts with Supabase's `auth.users`. If you have an existing `users` table, run the migration `0001_rename_users_to_crm_users.sql` to rename it.
 
 ### Error: "SUPABASE_DB_URL environment variable is not set"
 **Solution:** Create `.env.local` file with your database connection string.
@@ -93,9 +95,11 @@ The database connection is configured in `src/lib/db/index.ts`. It uses lazy ini
 
 To use the database in your code:
 ```typescript
-import { getDb, users } from '@/lib/db';
+import { getDb, crmUsers } from '@/lib/db';
 import { eq } from 'drizzle-orm';
 
 const db = await getDb();
-const allUsers = await db.select().from(users);
+const allUsers = await db.select().from(crmUsers);
 ```
+
+**Note:** The table is named `crm_users` (constant: `crmUsers`) to avoid conflicts with Supabase's `auth.users` table.

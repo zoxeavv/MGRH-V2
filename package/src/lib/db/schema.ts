@@ -6,7 +6,9 @@ export const organizations = pgTable('organizations', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 });
 
-export const users = pgTable('users', {
+// CRM Users table - separate from Supabase auth.users
+// This table stores extended user profile data for the CRM application
+export const crmUsers = pgTable('crm_users', {
   id: uuid('id').primaryKey(),
   email: text('email').notNull().unique(),
   fullName: text('full_name'),

@@ -5,20 +5,20 @@
  * Run migrations using: npm run db:push
  */
 
-import { checkDatabaseConnection, checkUsersTableExists } from './index';
+import { checkDatabaseConnection, checkCrmUsersTableExists } from './index';
 
 export async function verifyDatabaseSetup(): Promise<{
   connected: boolean;
-  usersTableExists: boolean;
+  crmUsersTableExists: boolean;
   ready: boolean;
 }> {
   const connected = await checkDatabaseConnection();
-  const usersTableExists = await checkUsersTableExists();
+  const crmUsersTableExists = await checkCrmUsersTableExists();
   
   return {
     connected,
-    usersTableExists,
-    ready: connected && usersTableExists,
+    crmUsersTableExists,
+    ready: connected && crmUsersTableExists,
   };
 }
 
@@ -27,7 +27,7 @@ export async function logDatabaseStatus(): Promise<void> {
   
   console.log('Database Status:');
   console.log(`  Connected: ${status.connected ? '✅' : '❌'}`);
-  console.log(`  Users table exists: ${status.usersTableExists ? '✅' : '❌'}`);
+  console.log(`  CRM Users table exists: ${status.crmUsersTableExists ? '✅' : '❌'}`);
   console.log(`  Ready: ${status.ready ? '✅' : '❌'}`);
   
   if (!status.ready) {
